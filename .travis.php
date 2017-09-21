@@ -73,23 +73,33 @@ QWEQWEQWE';
     }
 
     public function testNumberEntered() {
-        $this->assertAttributeEquals(35, $this->NumberEntered, 'NumberEntered value does not match expected value!');
+        $Expected = 35;
+        $Actual = $this->NumberEntered;
+        $this->assertEquals($Expected, $Actual, 'NumberEntered value does not match expected value!');
     }
 
     public function testNumberRejected() {
-        $this->assertAttributeEquals(14, $this->NumberRejected, 'NumberRejected value does not match expected value!');
+        $Expected = 14;
+        $Actual = $this->NumberRejected;
+        $this->assertEquals($Expected, $Actual, 'NumberRejected value does not match expected value!');
     }
 
     public function testNumberAccepted() {
-        $this->assertAttributeEquals(21, $this->NumberAccepted, 'NumberAccepted value does not match expected value!');
+        $Expected = 21;
+        $Actual = $this->NumberAccepted;
+        $this->assertEquals($Expected, $Actual, 'NumberAccepted value does not match expected value!');
     }
 
     public function testNumberMerged() {
-        $this->assertAttributeEquals(12, $this->NumberMerged, 'NumberMerged value does not match expected value!');
+        $Expected = 12;
+        $Actual = $this->NumberMerged;
+        $this->assertEquals($Expected, $Actual, 'NumberMerged value does not match expected value!');
     }
 
     public function testNumberReturned() {
-        $this->assertAttributeEquals(9, $this->NumberReturned, 'NumberReturned value does not match expected value!');
+        $Expected = 9;
+        $Actual = $this->NumberReturned;
+        $this->assertEquals($Expected, $Actual, 'NumberReturned value does not match expected value!');
     }
 
     public function testExpandIPv4() {
