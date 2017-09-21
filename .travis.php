@@ -2,15 +2,10 @@
 require __DIR__ . '/aggregator.php';
 
 $ClassNames = array('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
-$ClassExists = array(class_exists($ClassNames[0]), class_exists($ClassNames[1]));
-if ($ClassExists[0]) {
-    if (!$ClassExists[1]) {
-        class_alias($ClassNames[0], $ClassNames[1]);
-    }
-} elseif (!$ClassExists[1]) {
-    die('Can\'t continue. PHPUnit not loaded.');
+if (class_exists($ClassNames[0]) && !class_exists($ClassNames[1])) {
+    class_alias($ClassNames[0], $ClassNames[1]);
 }
-unset($ClassExists, $ClassNames);
+unset($ClassNames);
 
 class Experimental extends \PHPUnit_Framework_TestCase
 {
@@ -74,40 +69,40 @@ QWEQWEQWE';
         $this->NumberAccepted = $Aggregator->NumberAccepted;
         $this->NumberMerged = $Aggregator->NumberMerged;
         $this->NumberReturned = $Aggregator->NumberReturned;
-        $this->assertEquals($Aggregated, $ExpectedOutput, 'Actual aggregated output does not match expected aggregated output!');
+        $this->assertEquals($ExpectedOutput, $Aggregated, 'Actual aggregated output does not match expected aggregated output!');
     }
 
     public function testNumberEntered() {
-        $this->assertEquals($this->NumberEntered, 35, 'NumberEntered value does not match expected value!');
+        $this->assertAttributeEquals(35, $this->NumberEntered, 'NumberEntered value does not match expected value!');
     }
 
     public function testNumberRejected() {
-        $this->assertEquals($this->NumberRejected, 14, 'NumberRejected value does not match expected value!');
+        $this->assertAttributeEquals(14, $this->NumberRejected, 'NumberRejected value does not match expected value!');
     }
 
     public function testNumberAccepted() {
-        $this->assertEquals($this->NumberAccepted, 21, 'NumberAccepted value does not match expected value!');
+        $this->assertAttributeEquals(21, $this->NumberAccepted, 'NumberAccepted value does not match expected value!');
     }
 
     public function testNumberMerged() {
-        $this->assertEquals($this->NumberMerged, 12, 'NumberMerged value does not match expected value!');
+        $this->assertAttributeEquals(12, $this->NumberMerged, 'NumberMerged value does not match expected value!');
     }
 
     public function testNumberReturned() {
-        $this->assertEquals($this->NumberReturned, 9, 'NumberReturned value does not match expected value!');
+        $this->assertAttributeEquals(9, $this->NumberReturned, 'NumberReturned value does not match expected value!');
     }
 
     public function testExpandIPv4() {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv4('127.0.0.1');
         $Checksum = md5(serialize($Out));
-        $this->assertEquals($Checksum, 'cd37d1d14133dfd75f9dd13414cdcd76', 'ExpandIPv4 output does not match expected output!');
+        $this->assertEquals('cd37d1d14133dfd75f9dd13414cdcd76', $Checksum, 'ExpandIPv4 output does not match expected output!');
     }
 
     public function testExpandIPv6() {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv6('2002::1');
         $Checksum = md5(serialize($Out));
-        $this->assertEquals($Checksum, '149e73862203bf6ae504a2474f7c12a8', 'ExpandIPv6 output does not match expected output!');
+        $this->assertEquals('149e73862203bf6ae504a2474f7c12a8', $Checksum, 'ExpandIPv6 output does not match expected output!');
     }
 }
