@@ -9,13 +9,6 @@ unset($ClassNames);
 
 class Experimental extends \PHPUnit_Framework_TestCase
 {
-
-    private $NumberEntered = 0;
-    private $NumberRejected = 0;
-    private $NumberAccepted = 0;
-    private $NumberMerged = 0;
-    private $NumberReturned = 0;
-
     public function testInOut() {
         $TestInput = '127.0.0.1 Some arbitrary single IPs from here
 127.0.0.2
@@ -71,44 +64,12 @@ QWEQWEQWE';
         $this->NumberReturned = $Aggregator->NumberReturned;
         $this->assertEquals($ExpectedOutput, $Aggregated, 'Actual aggregated output does not match expected aggregated output!');
     }
-
-    public function testNumberEntered() {
-        $Expected = 35;
-        $Actual = $this->NumberEntered;
-        $this->assertEquals($Expected, $Actual, 'NumberEntered value does not match expected value!');
-    }
-
-    public function testNumberRejected() {
-        $Expected = 14;
-        $Actual = $this->NumberRejected;
-        $this->assertEquals($Expected, $Actual, 'NumberRejected value does not match expected value!');
-    }
-
-    public function testNumberAccepted() {
-        $Expected = 21;
-        $Actual = $this->NumberAccepted;
-        $this->assertEquals($Expected, $Actual, 'NumberAccepted value does not match expected value!');
-    }
-
-    public function testNumberMerged() {
-        $Expected = 12;
-        $Actual = $this->NumberMerged;
-        $this->assertEquals($Expected, $Actual, 'NumberMerged value does not match expected value!');
-    }
-
-    public function testNumberReturned() {
-        $Expected = 9;
-        $Actual = $this->NumberReturned;
-        $this->assertEquals($Expected, $Actual, 'NumberReturned value does not match expected value!');
-    }
-
     public function testExpandIPv4() {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv4('127.0.0.1');
         $Checksum = md5(serialize($Out));
         $this->assertEquals('cd37d1d14133dfd75f9dd13414cdcd76', $Checksum, 'ExpandIPv4 output does not match expected output!');
     }
-
     public function testExpandIPv6() {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv6('2002::1');
