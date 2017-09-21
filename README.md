@@ -24,7 +24,7 @@ require __DIR__ . '/aggregator.php';
 
 ### How to use:
 
-The simplest way to use Aggregate is to create a new instance of the class and enter some data to be aggregated as a parameter to the aggregate method. The aggregate method will return an aggregate of the entered data.
+The simplest way to use Aggregator is to create a new instance of the class and enter some data to be aggregated as a parameter to the aggregate method. The aggregate method will return an aggregate of the entered data.
 
 Example:
 ```PHP
@@ -50,7 +50,16 @@ In the case of the above example, if this is entered as `$Input`:
 257.0.0.999 Some arbitrary INVALID single IPs from here
 555.666.777.888
 2002:abcd:efgh::1
-192.168.0.0/8 Some arbitrary CIDRs from here
+10.0.0.0/9 Some arbitrary CIDRs from here
+10.128.0.0/9
+10.192.0.0/10
+11.128.0.0/10
+11.192.0.0/10
+12.0.0.0/9
+12.128.0.0/9
+13.0.0.0/9
+13.128.0.0/9
+192.168.0.0/8 Some arbitrary INVALID CIDRs from here
 192.168.0.0/9
 192.168.0.0/10
 192.168.192.0/10
@@ -67,6 +76,9 @@ QWEQWEQWE
 ```
 1::/127
 1:2:3:4::/126
+10.0.0.0/8
+11.128.0.0/9
+12.0.0.0/7
 2002::1/128
 127.0.0.1/32
 127.0.0.2/31
