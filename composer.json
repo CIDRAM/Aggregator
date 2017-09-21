@@ -1,0 +1,18 @@
+{
+    "name": "cidram/aggregator",
+    "description": "A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDRAM.",
+    "keywords": ["cidram","aggregator","cidr","ip","ipv4","ipv6","networking","subnets"],
+    "homepage": "https://cidram.github.io/",
+    "license": "GPL-2.0+",
+    "support": {
+        "issues": "https://github.com/CIDRAM/Aggregator/issues",
+        "forum": "http://www.spambotsecurity.com/forum/viewforum.php?f=61",
+        "source": "https://github.com/CIDRAM/Aggregator"
+    },
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "suggest": {
+        "php": ">=7.0.0 (this package performs significantly better with PHP >= 7.0.0 than it does with previous versions)."
+    }
+}
