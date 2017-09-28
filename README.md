@@ -85,7 +85,7 @@ QWEQWEQWE
 127.0.0.4/31
 ```
 
-Data is newline-delimited and each line represents one item to be aggregated. Aggregator handles IPv4+IPv6 seamlessly, attempts to clean up each item (i.e., remove invalid and superfluous data in order to reduce to a valid IP or CIDR), attempts to aggregate the resultant cleanup up data (unreadable and invalid data is rejected), and then returns the resultant aggregated data.
+Data is newline-delimited and each line represents one item to be aggregated. Aggregator handles IPv4+IPv6 seamlessly, attempts to clean up each item (i.e., remove invalid and superfluous data in order to reduce to a valid IP or CIDR), attempts to aggregate the resultant cleaned up data (unreadable and invalid data is rejected), and then returns the resultant aggregated data.
 
 It is possible to obtain more information about each aggregation operation if desired. If "Results" is set to `true` (it is `false` by default), then "NumberEntered" (the total number of lines entered when an operation begins), "NumberRejected" (the number of lines or items "rejected", i.e., perceived as invalid, or unreadable; note that this number will also also duplicate items, due to that duplicates are stripped along with invalid and superfluous data prior to aggregation), "NumberAccepted" (the number of lines or items accepted for aggregation; i.e., `NumberAccepted = NumberEntered - NumberRejected`), "NumberMerged" (the total number of items aggregated or merged), and "NumberReturned" (the total number of items returned at the end of an operation) will be populated during operation accordingly. These values can be retrieved after each operation from the class instance or object:
 
@@ -127,7 +127,7 @@ Additionally, "ExpandIPv4" and "ExpandIPv6" public methods are provided with the
 ### Other information:
 
 #### Licensing:
-Licensed as [GNU General Public License version 2.0](https://github.com/CIDRAM/CIDRAM/blob/master/LICENSE.txt) (GPLv2).
+Licensed as [GNU General Public License version 2.0](https://github.com/CIDRAM/Aggregator/blob/master/LICENSE.txt) (GPLv2).
 
 #### For support:
 Please use the issues page of this repository.
@@ -135,4 +135,4 @@ Please use the issues page of this repository.
 ---
 
 
-*Last modified: 21 September 2017 (2017.09.21).*
+*Last modified: 22 September 2017 (2017.09.22).*
