@@ -1,0 +1,16 @@
+Aggregator Changelog.
+
+=== VERSIONING GUIDELINES ===
+Aggregator adheres to the SemVer guidelines for versioning.
+
+Versioning guidelines for SemVer can be found at: http://www.semver.org/
+
+=== Changes made since last versioned release ===
+
+- [2017.10.08; Sub-minor code change; Maikuolan]: Refactored code.
+
+=== Version/Release 1.0.0 ===
+FIRST TAGGED RELEASE.
+
+Caleb M (Maikuolan),
+21st September 2017.
