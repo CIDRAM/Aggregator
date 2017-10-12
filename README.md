@@ -5,24 +5,17 @@ A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDR
 
 ---
 
-
 ### How to install:
 
-As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the class, `aggregator.php`, directly from this repository, and copy it to any projects that need it, or, if you'd prefer, you can install it using Composer:
+As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the class, [aggregator.php](src/Aggregator.php), directly from this repository, and copy it to any projects that need it, or, if you'd prefer, you can install it using Composer:
 
 `composer require cidram/aggregator`
 
 *Note: The code in this class is based upon code in the CIDRAM package, but the two are NOT dependent on each other.*
 
-After you've downloaded the file, to allow your projects to use the class, [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading is preferred (particularly if you're using a large number of different, unrelated classes). If you're installing the class via Composer, then this will already be taken care of for you, and you won't need to worry about it. Alternatively, if you're installing it manually (or without Composer), and don't want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may be much easier in many cases) by including the respective statement to point to the class file in the relevant PHP files:
-
-```PHP
-<?php
-require __DIR__ . '/aggregator.php';
-```
+After you've downloaded the file, to allow your projects to use the class, [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading is preferred (particularly if you're using a large number of different, unrelated classes). If you're installing the class via Composer, all you have to do is `require_once 'vendor/autoload.php';` and everything will be taken care of. Alternatively, if you're installing it manually (or without Composer), and don't want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may be much easier in many cases) by including the respective statement to point to the class file in the relevant PHP files.
 
 ---
-
 
 ### How to use:
 
@@ -31,9 +24,18 @@ The simplest way to use Aggregator is to create a new instance of the class and 
 Example:
 ```PHP
 <?php
+use \CIDRAM\Aggregator\Aggregator;
+
 $Aggregator = new Aggregator();
 $Output = $Aggregator->aggregate($Input);
 ```
+
+Or, if the file helpers.php is loaded, this function will be available:
+```PHP
+$Output = aggregate($Input);
+```
+
+*Note: The function `aggregate` will be available if you installed the package via `composer`, but otherwise, you'll need to include the file `src/helpers.php`.*
 
 In the case of the above example, if this is entered as `$Input`:
 ```
@@ -93,6 +95,8 @@ It is possible to obtain more information about each aggregation operation if de
 
 ```PHP
 <?php
+use \CIDRAM\Aggregator\Aggregator;
+
 $Aggregator = new Aggregator();
 $Aggregator->Results = true;
 $Output = $Aggregator->aggregate($Input);
@@ -116,6 +120,8 @@ Regardless of whether "Results" is `true` or `false`, after each aggregation ope
 Example:
 ```PHP
 <?php
+use \CIDRAM\Aggregator\Aggregator;
+
 $Aggregator = new Aggregator();
 $Output = $Aggregator->aggregate($Input);
 echo $Aggregator->ProcessingTime . "\n";
@@ -124,7 +130,6 @@ echo $Aggregator->ProcessingTime . "\n";
 Additionally, "ExpandIPv4" and "ExpandIPv6" public methods are provided with the class, and they function in exactly the same way their CIDRAM package closure counterparts. Calling either of these with an IPv4 or IPv6 IP address respectively will return an array containing the potential factors for the given IP address. The potential factors are all possible subnets (or CIDRs) that the given IP address is a member of. When a valid IP address is supplied, "ExpandIPv4" and "ExpandIPv6" and should return an array with 32 and 128 elements respectively.
 
 ---
-
 
 ### Other information:
 
@@ -136,5 +141,4 @@ Please use the issues page of this repository.
 
 ---
 
-
-*Last modified: 22 September 2017 (2017.09.22).*
+*Last modified: 12 October 2017 (2017.10.12).*

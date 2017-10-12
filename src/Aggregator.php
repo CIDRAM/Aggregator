@@ -1,6 +1,8 @@
 <?php
+namespace CIDRAM\Aggregator;
+
 /**
- * Aggregator v1.0.1-DEV (last modified: 2017.10.08).
+ * Aggregator v1.1.0-DEV (last modified: 2017.10.12).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -12,16 +14,16 @@
  * AGGREGATOR COPYRIGHT 2017 and beyond by Caleb Mazalevskis (Maikuolan).
  *
  * License: GNU/GPLv2
+ *
  * @see LICENSE.txt
  */
-
 class Aggregator
 {
 
     /** Input. */
     public $Input = '';
 
-    /** Outout. */
+    /** Output. */
     public $Output = '';
 
     /** Results switch. */
@@ -53,9 +55,9 @@ class Aggregator
      *
      * Adapted from CIDRAM/CIDRAM->vault/functions.php->$CIDRAM['ExpandIPv4']().
      *
-     * @param string $Addr Refer to the description above.
-     * @param bool $ValidateOnly If true, just checks if the IP is valid only.
-     * @param int $FactorLimit Maximum number of CIDRs to return (default: 32).
+     * @param string $Addr         Refer to the description above.
+     * @param bool   $ValidateOnly If true, just checks if the IP is valid only.
+     * @param int    $FactorLimit  Maximum number of CIDRs to return (default: 32).
      * @return bool|array Refer to the description above.
      */
     public function ExpandIPv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
@@ -64,14 +66,15 @@ class Aggregator
             '/^([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\.([01]?[0-9]{1,2}|2[0-4][0-' .
             '9]|25[0-5])\.([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])\.([01]?[0-9]{1,2' .
             '}|2[0-4][0-9]|25[0-5])$/i',
-        $Addr, $Octets)) {
+            $Addr, $Octets)
+        ) {
             return false;
         }
         if ($ValidateOnly) {
             return true;
         }
-        $CIDRs = array();
-        $Base = array(0, 0, 0, 0);
+        $CIDRs = [];
+        $Base = [0, 0, 0, 0];
         for ($Cycle = 0; $Cycle < 4; $Cycle++) {
             for ($Size = 128, $Step = 0; $Step < 8; $Step++, $Size /= 2) {
                 $CIDR = $Step + ($Cycle * 8);
@@ -82,6 +85,7 @@ class Aggregator
                 }
             }
         }
+
         return $CIDRs;
     }
 
@@ -93,9 +97,9 @@ class Aggregator
      *
      * Adapted from CIDRAM/CIDRAM->vault/functions.php->$CIDRAM['ExpandIPv6']().
      *
-     * @param string $Addr Refer to the description above.
-     * @param bool $ValidateOnly If true, just checks if the IP is valid only.
-     * @param int $FactorLimit Maximum number of CIDRs to return (default: 128).
+     * @param string $Addr         Refer to the description above.
+     * @param bool   $ValidateOnly If true, just checks if the IP is valid only.
+     * @param int    $FactorLimit  Maximum number of CIDRs to return (default: 128).
      * @return bool|array Refer to the description above.
      */
     public function ExpandIPv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
@@ -119,7 +123,8 @@ class Aggregator
             '-4]\d)|(\d{1,2}))\b))|([0-9a-f]{1,4}\:\:([0-9a-f]{1,4}\:){0,5}[0-9a' .
             '-f]{1,4})|(\:\:([0-9a-f]{1,4}\:){0,6}[0-9a-f]{1,4})|(([0-9a-f]{1,4}' .
             '\:){1,7}\:)$/i',
-        $Addr)) {
+            $Addr)
+        ) {
             return false;
         }
         if ($ValidateOnly) {
@@ -134,7 +139,7 @@ class Aggregator
         }
         if (substr_count($NAddr, '::')) {
             $c = 7 - substr_count($Addr, ':');
-            $Arr = array(':0:', ':0:0:', ':0:0:0:', ':0:0:0:0:', ':0:0:0:0:0:', ':0:0:0:0:0:0:');
+            $Arr = [':0:', ':0:0:', ':0:0:0:', ':0:0:0:0:', ':0:0:0:0:0:', ':0:0:0:0:0:0:'];
             if (!isset($Arr[$c])) {
                 return false;
             }
@@ -153,8 +158,8 @@ class Aggregator
         $NAddr[5] = hexdec($NAddr[5]);
         $NAddr[6] = hexdec($NAddr[6]);
         $NAddr[7] = hexdec($NAddr[7]);
-        $CIDRs = array();
-        $Base = array(0, 0, 0, 0, 0, 0, 0, 0);
+        $CIDRs = [];
+        $Base = [0, 0, 0, 0, 0, 0, 0, 0];
         for ($Cycle = 0; $Cycle < 8; $Cycle++) {
             for ($Size = 32768, $Step = 0; $Step < 16; $Step++, $Size /= 2) {
                 $CIDR = $Step + ($Cycle * 16);
@@ -184,6 +189,7 @@ class Aggregator
                 continue;
             }
         }
+
         return $CIDRs;
     }
 
@@ -197,6 +203,7 @@ class Aggregator
         $this->stripInvalidRangesAndSubs($this->Output);
         $this->mergeRanges($this->Output);
         $this->ProcessingTime = microtime(true) - $Begin;
+
         return $this->Output;
     }
 
@@ -208,7 +215,8 @@ class Aggregator
             $this->NumberEntered = count($In);
         }
         $In = array_filter(array_unique(array_map(function ($Line) {
-            $Line = preg_replace(array('~^[^0-9a-f:./]*~i', '~[ \t].*$~', '~[^0-9a-f:./]*$~i'), '', $Line);
+            $Line = preg_replace(['~^[^0-9a-f:./]*~i', '~[ \t].*$~', '~[^0-9a-f:./]*$~i'], '', $Line);
+
             return (!$Line || !preg_match('~[0-9a-f:./]+~i', $Line) || preg_match('~[^0-9a-f:./]+~i', $Line)) ? '' : $Line;
         }, $In)));
         usort($In, function ($A, $B) {
@@ -234,6 +242,7 @@ class Aggregator
                 if ($B === false) {
                     return 0;
                 }
+
                 return 1;
             }
             if ($B === false) {
@@ -244,8 +253,10 @@ class Aggregator
                 if ($ASize === $BSize) {
                     return 0;
                 }
+
                 return ($ASize > $BSize) ? 1 : -1;
             }
+
             return ($Compare < 0) ? -1 : 1;
         });
         $In = implode("\n", $In);
@@ -355,5 +366,4 @@ class Aggregator
         $this->NumberReturned = 0;
         $this->ProcessingTime = 0;
     }
-
 }

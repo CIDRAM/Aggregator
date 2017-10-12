@@ -1,15 +1,12 @@
 <?php
-require __DIR__ . '/aggregator.php';
+namespace CIDRAM\Aggregator;
 
-$ClassNames = array('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
-if (class_exists($ClassNames[0]) && !class_exists($ClassNames[1])) {
-    class_alias($ClassNames[0], $ClassNames[1]);
-}
-unset($ClassNames);
+use PHPUnit\Framework\TestCase;
 
-class Experimental extends \PHPUnit_Framework_TestCase
+class AggregatorTest extends TestCase
 {
-    public function testInOut() {
+    public function testInOut()
+    {
         $TestInput = '127.0.0.1 Some arbitrary single IPs from here
 127.0.0.2
 127.0.0.3
@@ -57,6 +54,8 @@ QWEQWEQWE';
         $Aggregator = new Aggregator();
         $Aggregator->Results = true;
         $Aggregated = $Aggregator->aggregate($TestInput);
+        $ExpectedOutput = str_replace(PHP_EOL, "\n", $ExpectedOutput);
+
         $this->NumberEntered = $Aggregator->NumberEntered;
         $this->NumberRejected = $Aggregator->NumberRejected;
         $this->NumberAccepted = $Aggregator->NumberAccepted;
@@ -64,13 +63,17 @@ QWEQWEQWE';
         $this->NumberReturned = $Aggregator->NumberReturned;
         $this->assertEquals($ExpectedOutput, $Aggregated, 'Actual aggregated output does not match expected aggregated output!');
     }
-    public function testExpandIPv4() {
+
+    public function testExpandIPv4()
+    {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv4('127.0.0.1');
         $Checksum = md5(serialize($Out));
         $this->assertEquals('cd37d1d14133dfd75f9dd13414cdcd76', $Checksum, 'ExpandIPv4 output does not match expected output!');
     }
-    public function testExpandIPv6() {
+
+    public function testExpandIPv6()
+    {
         $Aggregator = new Aggregator();
         $Out = $Aggregator->ExpandIPv6('2002::1');
         $Checksum = md5(serialize($Out));
