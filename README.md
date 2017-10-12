@@ -7,22 +7,13 @@ A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDR
 
 ### How to install:
 
-As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the
- class, [Aggregator.php](src/Aggregator.php), directly from this repository, and copy it to any projects 
- that need it, or, if you'd prefer, you can install it using Composer:
+As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the class, [aggregator.php](src/Aggregator.php), directly from this repository, and copy it to any projects that need it, or, if you'd prefer, you can install it using Composer:
 
 `composer require cidram/aggregator`
 
-*Note: The code in this class is based upon code in the CIDRAM package, but the two are NOT dependent 
-on each other.*
+*Note: The code in this class is based upon code in the CIDRAM package, but the two are NOT dependent on each other.*
 
-After you've downloaded the file, to allow your projects to use the class, [PSR-4](http://www.php-fig.org/psr/psr-4/) 
-autoloading is preferred (particularly if you're using a large number of different, unrelated classes). 
-If you're installing the class via Composer, all you have to do is `require_once 'vendor/autoload.php` and everything 
-will be taken care of. Alternatively, if you're installing it manually (or without Composer), and don't
-want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may
-be much easier in many cases) by including the respective statement to point to the class file in the 
-relevant PHP files
+After you've downloaded the file, to allow your projects to use the class, [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading is preferred (particularly if you're using a large number of different, unrelated classes). If you're installing the class via Composer, all you have to do is `require_once 'vendor/autoload.php';` and everything will be taken care of. Alternatively, if you're installing it manually (or without Composer), and don't want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may be much easier in many cases) by including the respective statement to point to the class file in the relevant PHP files.
 
 ---
 
@@ -37,15 +28,14 @@ use \CIDRAM\Aggregator\Aggregator;
 
 $Aggregator = new Aggregator();
 $Output = $Aggregator->aggregate($Input);
-
-// or...
-
-$Output = aggregate($Input); // this function will be available if the file helpers.php is loaded
-
 ```
 
-*Note: The function `aggregate` will be available if you installed the package via `composer`, if not,
-you need to include the file `src/helpers.php`*
+Or, if the file helpers.php is loaded, this function will be available:
+```PHP
+$Output = aggregate($Input);
+```
+
+*Note: The function `aggregate` will be available if you installed the package via `composer`, but otherwise, you'll need to include the file `src/helpers.php`.*
 
 In the case of the above example, if this is entered as `$Input`:
 ```

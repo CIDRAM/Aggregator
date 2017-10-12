@@ -1,9 +1,8 @@
 <?php
-
 namespace CIDRAM\Aggregator;
 
 /**
- * Aggregator v1.0.1-DEV (last modified: 2017.10.08).
+ * Aggregator v1.1.0-DEV (last modified: 2017.10.12).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -24,7 +23,7 @@ class Aggregator
     /** Input. */
     public $Input = '';
 
-    /** Outout. */
+    /** Output. */
     public $Output = '';
 
     /** Results switch. */
