@@ -2,7 +2,7 @@
 namespace CIDRAM\Aggregator;
 
 /**
- * Aggregator v1.1.0-DEV (last modified: 2017.10.12).
+ * Aggregator v1.1.0-DEV (last modified: 2017.10.17).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -85,7 +85,6 @@ class Aggregator
                 }
             }
         }
-
         return $CIDRs;
     }
 
@@ -150,14 +149,9 @@ class Aggregator
         if (count($NAddr) !== 8) {
             return false;
         }
-        $NAddr[0] = hexdec($NAddr[0]);
-        $NAddr[1] = hexdec($NAddr[1]);
-        $NAddr[2] = hexdec($NAddr[2]);
-        $NAddr[3] = hexdec($NAddr[3]);
-        $NAddr[4] = hexdec($NAddr[4]);
-        $NAddr[5] = hexdec($NAddr[5]);
-        $NAddr[6] = hexdec($NAddr[6]);
-        $NAddr[7] = hexdec($NAddr[7]);
+        for ($i = 0; $i < 8; $i++) {
+            $NAddr[$i] = hexdec($NAddr[$i]);
+        }
         $CIDRs = [];
         $Base = [0, 0, 0, 0, 0, 0, 0, 0];
         for ($Cycle = 0; $Cycle < 8; $Cycle++) {
@@ -189,7 +183,6 @@ class Aggregator
                 continue;
             }
         }
-
         return $CIDRs;
     }
 
@@ -203,7 +196,6 @@ class Aggregator
         $this->stripInvalidRangesAndSubs($this->Output);
         $this->mergeRanges($this->Output);
         $this->ProcessingTime = microtime(true) - $Begin;
-
         return $this->Output;
     }
 
@@ -216,7 +208,6 @@ class Aggregator
         }
         $In = array_filter(array_unique(array_map(function ($Line) {
             $Line = preg_replace(['~^[^0-9a-f:./]*~i', '~[ \t].*$~', '~[^0-9a-f:./]*$~i'], '', $Line);
-
             return (!$Line || !preg_match('~[0-9a-f:./]+~i', $Line) || preg_match('~[^0-9a-f:./]+~i', $Line)) ? '' : $Line;
         }, $In)));
         usort($In, function ($A, $B) {
@@ -239,11 +230,7 @@ class Aggregator
                 !$this->ExpandIPv4($B, true) && !$this->ExpandIPv6($B, true)
             ) ? '' : inet_pton($B);
             if ($A === false) {
-                if ($B === false) {
-                    return 0;
-                }
-
-                return 1;
+                return $B === false ? 0 : 1;
             }
             if ($B === false) {
                 return -1;
@@ -253,11 +240,9 @@ class Aggregator
                 if ($ASize === $BSize) {
                     return 0;
                 }
-
-                return ($ASize > $BSize) ? 1 : -1;
+                return $ASize > $BSize ? 1 : -1;
             }
-
-            return ($Compare < 0) ? -1 : 1;
+            return $Compare < 0 ? -1 : 1;
         });
         $In = implode("\n", $In);
     }
