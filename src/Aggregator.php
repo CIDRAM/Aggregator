@@ -2,7 +2,7 @@
 namespace CIDRAM\Aggregator;
 
 /**
- * Aggregator v1.1.0-DEV (last modified: 2017.10.17).
+ * Aggregator v1.1.0 (last modified: 2017.10.29).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
