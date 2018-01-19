@@ -3,7 +3,7 @@
     "description": "A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDRAM.",
     "keywords": ["cidram","aggregator","cidr","ip","ipv4","ipv6","networking","subnets"],
     "homepage": "https://cidram.github.io/",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "support": {
         "issues": "https://github.com/CIDRAM/Aggregator/issues",
         "forum": "http://www.spambotsecurity.com/forum/viewforum.php?f=61",
