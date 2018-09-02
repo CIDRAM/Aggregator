@@ -1,7 +1,9 @@
-## Aggregator.
+[![Join the chat at https://gitter.im/CIDRAM/Lobby](https://badges.gitter.im/CIDRAM/Lobby.svg)](https://gitter.im/CIDRAM/Lobby)
 [![PHP >= 5.4.0](https://img.shields.io/badge/PHP-%3E%3D%205.4.0-8892bf.svg)](https://maikuolan.github.io/Compatibility-Charts/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](http://makeapullrequest.com)
 
+## Aggregator.
 A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDRAM.
 
 ---
@@ -14,7 +16,7 @@ As a stand-alone PHP class, installing it is exceptionally easy. You can downloa
 
 *Note: The code in this class is based upon code in the CIDRAM package, but the two are NOT dependent on each other.*
 
-After you've downloaded the file, to allow your projects to use the class, [PSR-4](http://www.php-fig.org/psr/psr-4/) autoloading is preferred (particularly if you're using a large number of different, unrelated classes). If you're installing the class via Composer, all you have to do is `require_once 'vendor/autoload.php';` and everything will be taken care of. Alternatively, if you're installing it manually (or without Composer), and don't want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may be much easier in many cases) by including the respective statement to point to the class file in the relevant PHP files.
+After you've downloaded the file, to allow your projects to use the class, [PSR-4](https://www.php-fig.org/psr/psr-4/) autoloading is preferred (particularly if you're using a large number of different, unrelated classes). If you're installing the class via Composer, all you have to do is `require_once 'vendor/autoload.php';` and everything will be taken care of. Alternatively, if you're installing it manually (or without Composer), and don't want to use a PSR-4 autoloader, you can simply require or include the class into your projects (which may be much easier in many cases) by including the respective statement to point to the class file in the relevant PHP files.
 
 ---
 
@@ -142,4 +144,4 @@ Please use the issues page of this repository.
 
 ---
 
-*Last modified: 12 October 2017 (2017.10.12).*
+*Last modified: 3 September 2018 (2018.09.03).*
