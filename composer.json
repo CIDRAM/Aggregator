@@ -5,15 +5,15 @@
     "homepage": "https://cidram.github.io/",
     "license": "GPL-2.0-or-later",
     "support": {
+        "chat": "https://gitter.im/CIDRAM/Lobby",
         "issues": "https://github.com/CIDRAM/Aggregator/issues",
-        "forum": "http://www.spambotsecurity.com/forum/viewforum.php?f=61",
         "source": "https://github.com/CIDRAM/Aggregator"
     },
     "require": {
         "php": ">=5.4.0"
     },
     "suggest": {
-        "php": ">=7.0.0 (this package performs significantly better with PHP >= 7.0.0 than it does with previous versions)."
+        "php": ">=7.2.0 (this package performs significantly better with PHP >= 7.2.0)."
     },
     "autoload": {
         "psr-4": {
@@ -22,9 +22,9 @@
         "files": ["src/helpers.php"]
     },
     "autoload-dev": {
-      "psr-4": {
-        "CIDRAM\\Aggregator\\": "tests/"
-      }
+        "psr-4": {
+            "CIDRAM\\Aggregator\\": "tests/"
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8"
