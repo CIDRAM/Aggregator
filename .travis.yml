@@ -10,7 +10,7 @@ php:
   - '7.3'
 
 before_script:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-rm xdebug.ini || true
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source
   - composer dump-autoload -o
