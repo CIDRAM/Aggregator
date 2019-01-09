@@ -1,8 +1,6 @@
 <?php
-namespace CIDRAM\Aggregator;
-
 /**
- * Aggregator v1.1.1 (last modified: 2018.05.16).
+ * Aggregator v1.2.0 (last modified: 2019.01.09).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -17,6 +15,9 @@ namespace CIDRAM\Aggregator;
  *
  * @see LICENSE.txt
  */
+
+namespace CIDRAM\Aggregator;
+
 class Aggregator
 {
 
@@ -46,6 +47,52 @@ class Aggregator
 
     /** Time consumed while aggregating data. */
     public $ProcessingTime = 0;
+
+    /** Conversion tables for netmasks to IPv4. */
+    private $TableNetmaskIPv4 = [];
+
+    /** Conversion tables for netmasks to IPv6. */
+    private $TableNetmaskIPv6 = [];
+
+    /** Conversion tables for IPv4 to netmasks. */
+    private $TableIPv4Netmask = [];
+
+    /** Conversion tables for IPv6 to netmasks. */
+    private $TableIPv6Netmask = [];
+
+    /** Specifies the format to use for Aggregator output. 0 = CIDR notation [default]. 1 = Netmask notation. */
+    private $Mode = 0;
+
+    public function __construct($Mode = 0)
+    {
+        $this->constructTables();
+        $this->Mode = $Mode;
+    }
+
+    /** Construct netmask<->CIDR conversion tables. */
+    private function constructTables()
+    {
+        $CIDR = 32;
+        for ($Octet = 4; $Octet > 0; $Octet--) {
+            $Base = str_repeat('255.', $Octet - 1);
+            $End = str_repeat('.0', 4 - $Octet);
+            for ($Addresses = 1, $Iterate = 0; $Iterate < 8; $Iterate++, $Addresses *= 2, $CIDR--) {
+                $Netmask = $Base . (256 - $Addresses) . $End;
+                $this->TableNetmaskIPv4[$CIDR] = $Netmask;
+                $this->TableIPv4Netmask[$Netmask] = $CIDR;
+            }
+        }
+        $CIDR = 128;
+        for ($Octet = 8; $Octet > 0; $Octet--) {
+            $Base = str_repeat('ffff:', $Octet - 1);
+            $End = ($Octet === 8) ? ':0' : '::';
+            for ($Addresses = 1, $Iterate = 0; $Iterate < 16; $Iterate++, $Addresses *= 2, $CIDR--) {
+                $Netmask = $Base . (dechex(65536 - $Addresses)) . $End;
+                $this->TableNetmaskIPv6[$CIDR] = $Netmask;
+                $this->TableIPv6Netmask[$Netmask] = $CIDR;
+            }
+        }
+    }
 
     /**
      * Tests whether $Addr is an IPv4 address, and if it is, expands its potential
@@ -193,6 +240,9 @@ class Aggregator
         $this->stripInvalidCharactersAndSort($this->Output);
         $this->stripInvalidRangesAndSubs($this->Output);
         $this->mergeRanges($this->Output);
+        if ($this->Mode === 1) {
+            $this->convertToNetmasks($this->Output);
+        }
         $this->ProcessingTime = microtime(true) - $Begin;
         return $this->Output;
     }
@@ -205,33 +255,64 @@ class Aggregator
             $this->NumberEntered = count($In);
         }
         $In = array_filter(array_unique(array_map(function ($Line) {
-            $Line = preg_replace(['~^[^0-9a-f:./]*~i', '~[ \t].*$~', '~[^0-9a-f:./]*$~i'], '', $Line);
-            return (!$Line || !preg_match('~[0-9a-f:./]+~i', $Line) || preg_match('~[^0-9a-f:./]+~i', $Line)) ? '' : $Line;
+            $Line = preg_replace(['~^[^\da-f:./]*~i', '~[ \t].*$~', '~[^\da-f:./]*$~i'], '', $Line);
+            return (!$Line || !preg_match('~[\da-f:./]+~i', $Line) || preg_match('~[^\da-f:./]+~i', $Line)) ? '' : $Line;
         }, $In)));
         usort($In, function ($A, $B) {
             if (($Pos = strpos($A, '/')) !== false) {
-                $ASize = (int)substr($A, $Pos + 1);
+                $ASize = substr($A, $Pos + 1);
                 $A = substr($A, 0, $Pos);
             } else {
                 $ASize = 0;
             }
-            $A = empty($A) || (
-                !$this->ExpandIPv4($A, true) && !$this->ExpandIPv6($A, true)
-            ) ? '' : inet_pton($A);
+            $AType = 0;
+            if ($this->ExpandIPv4($A, true)) {
+                $AType = 4;
+            } elseif ($this->ExpandIPv6($A, true)) {
+                $AType = 6;
+            }
+            $A = $AType ? inet_pton($A) : false;
+            if ($AType === 4 && isset($this->TableIPv4Netmask[$ASize])) {
+                $ASize = $this->TableIPv4Netmask[$ASize];
+            } elseif ($AType === 6 && isset($this->TableIPv6Netmask[$ASize])) {
+                $ASize = $this->TableIPv6Netmask[$ASize];
+            } else {
+                $ASize = (int)$ASize;
+            }
+            if ($ASize === 0) {
+                $ASize = ($AType === 4) ? 32 : 128;
+            }
             if (($Pos = strpos($B, '/')) !== false) {
-                $BSize = (int)substr($B, $Pos + 1);
+                $BSize = substr($B, $Pos + 1);
                 $B = substr($B, 0, $Pos);
             } else {
                 $BSize = 0;
             }
-            $B = empty($B) || (
-                !$this->ExpandIPv4($B, true) && !$this->ExpandIPv6($B, true)
-            ) ? '' : inet_pton($B);
+            $BType = 0;
+            if ($this->ExpandIPv4($B, true)) {
+                $BType = 4;
+            } elseif ($this->ExpandIPv6($B, true)) {
+                $BType = 6;
+            }
+            $B = $BType ? inet_pton($B) : false;
+            if ($BType === 4 && isset($this->TableIPv4Netmask[$BSize])) {
+                $BSize = $this->TableIPv4Netmask[$BSize];
+            } elseif ($BType === 6 && isset($this->TableIPv6Netmask[$BSize])) {
+                $BSize = $this->TableIPv6Netmask[$BSize];
+            } else {
+                $BSize = (int)$BSize;
+            }
+            if ($BSize === 0) {
+                $BSize = ($BType === 4) ? 32 : 128;
+            }
             if ($A === false) {
                 return $B === false ? 0 : 1;
             }
             if ($B === false) {
                 return -1;
+            }
+            if ($AType !== $BType) {
+                return $AType < $BType ? -1 : 1;
             }
             $Compare = strcmp($A, $B);
             if ($Compare === 0) {
@@ -257,29 +338,42 @@ class Aggregator
                 continue;
             }
             if (($RangeSep = strpos($Line, '/')) !== false) {
-                $Size = (int)substr($Line, $RangeSep + 1);
+                $Size = substr($Line, $RangeSep + 1);
                 $CIDR = substr($Line, 0, $RangeSep);
             } else {
-                $Size = false;
+                $Size = 0;
                 $CIDR = $Line;
             }
-            if (!$CIDRs = $this->ExpandIPv4($CIDR)) {
-                if (!$CIDRs = $this->ExpandIPv6($CIDR)) {
-                    $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
-                    continue;
-                }
-            }
-            $Ranges = count($CIDRs);
-            if ($Size === false) {
-                $Size = $Ranges;
-                $Out = str_replace("\n" . $CIDR . "\n", "\n" . $CIDRs[$Size - 1] . "\n", $Out);
-            } elseif (!isset($CIDRs[$Size - 1]) || $Line !== $CIDRs[$Size - 1]) {
+            if ($CIDRs = $this->ExpandIPv4($CIDR)) {
+                $Type = 4;
+                $Ranges = 32;
+            } elseif ($CIDRs = $this->ExpandIPv6($CIDR)) {
+                $Type = 6;
+                $Ranges = 128;
+            } else {
+                $Type = 0;
+                $Ranges = 0;
                 $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
                 continue;
             }
+            if ($Type === 4 && isset($this->TableIPv4Netmask[$Size])) {
+                $Size = $this->TableIPv4Netmask[$Size];
+            } elseif ($Type === 6 && isset($this->TableIPv6Netmask[$Size])) {
+                $Size = $this->TableIPv6Netmask[$Size];
+            } else {
+                $Size = (int)$Size;
+            }
+            if ($Size === 0) {
+                $Size = $Ranges;
+            }
+            if (!isset($CIDRs[$Size - 1]) || $CIDRs[$Size - 1] !== $CIDR . '/' . $Size) {
+                $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
+                continue;
+            }
+            $Out = str_replace("\n" . $Line . "\n", "\n" . $CIDRs[$Size - 1] . "\n", $Out);
             for ($Range = $Size - 2; $Range >= 0; $Range--) {
                 if (isset($CIDRs[$Range]) && strpos($Out, "\n" . $CIDRs[$Range] . "\n") !== false) {
-                    $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
+                    $Out = str_replace("\n" . $CIDRs[$Size - 1] . "\n", "\n", $Out);
                     if (!empty($this->Results)) {
                         $this->NumberMerged++;
                     }
@@ -337,6 +431,30 @@ class Aggregator
                 break;
             }
         }
+    }
+
+    /** Optionally converts output to netmask notation. */
+    private function convertToNetmasks(&$In)
+    {
+        $In = $Out = "\n" . $In . "\n";
+        $Offset = 0;
+        while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
+            $Line = substr($In, $Offset, $NewLine - $Offset);
+            $Offset = $NewLine + 1;
+            if (!$Line || ($RangeSep = strpos($Line, '/')) === false) {
+                continue;
+            }
+            $Size = substr($Line, $RangeSep + 1);
+            $CIDR = substr($Line, 0, $RangeSep);
+            $Type = ($this->ExpandIPv4($CIDR, true)) ? 4 : 6;
+            if ($Type === 4 && isset($this->TableNetmaskIPv4[$Size])) {
+                $Size = $this->TableNetmaskIPv4[$Size];
+            } elseif ($Type === 6 && isset($this->TableNetmaskIPv6[$Size])) {
+                $Size = $this->TableNetmaskIPv6[$Size];
+            }
+            $Out = str_replace("\n" . $Line . "\n", "\n" . $CIDR . '/' . $Size . "\n", $Out);
+        }
+        $In = trim($Out);
     }
 
     /** Resets numbers. */
