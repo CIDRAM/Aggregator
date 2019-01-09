@@ -3,12 +3,24 @@ Aggregator Changelog.
 === VERSIONING GUIDELINES ===
 Aggregator adheres to the SemVer guidelines for versioning.
 
-Versioning guidelines for SemVer can be found at: http://www.semver.org/
+Versioning guidelines for SemVer can be found at: https://semver.org/
 
 === Changes made since last versioned release ===
 
-- [2017.10.08; Sub-minor code change; Maikuolan]: Slightly refactored the
+(none)
+
+=== Version/Release 1.2.0 ===
+MINOR RELEASE.
+
+- [2018.05.16; Sub-minor code change; Maikuolan]: Slightly refactored the
   expressions used for expanding IP addresses.
+
+- [2019.01.09; Maikuolan]: Aggregator now sorts its input differently, as such
+  that IPv4 and IPv6 output isn't thoroughly mixed together anymore. Aggregator
+  now supports netmasks, both as input and as output.
+
+Caleb M (Maikuolan),
+January 9, 2019.
 
 === Version/Release 1.1.0 ===
 MINOR RELEASE.
