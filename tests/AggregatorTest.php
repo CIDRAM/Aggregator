@@ -143,11 +143,6 @@ QWEQWEQWE';
         $Aggregated = $Aggregator->aggregate($TestInput);
         $ExpectedOutput = str_replace(PHP_EOL, "\n", $ExpectedOutput);
 
-        $this->NumberEntered = $Aggregator->NumberEntered;
-        $this->NumberRejected = $Aggregator->NumberRejected;
-        $this->NumberAccepted = $Aggregator->NumberAccepted;
-        $this->NumberMerged = $Aggregator->NumberMerged;
-        $this->NumberReturned = $Aggregator->NumberReturned;
         $this->assertEquals($ExpectedOutput, $Aggregated, 'Actual aggregated output does not match expected aggregated output!');
     }
 
