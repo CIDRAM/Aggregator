@@ -10,7 +10,8 @@
         "source": "https://github.com/CIDRAM/Aggregator"
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ext-pcre": "*"
     },
     "suggest": {
         "php": ">=7.2.0 (this package performs significantly better with PHP >= 7.2.0)."
