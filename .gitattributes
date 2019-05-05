@@ -2,3 +2,8 @@
 # https://help.github.com/articles/dealing-with-line-endings/
 
 * text eol=lf
+
+# Refer to:
+# https://github.com/github/linguist
+
+*.md linguist-documentation
