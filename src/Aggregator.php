@@ -60,9 +60,6 @@ class Aggregator
     /** Conversion tables for IPv6 to netmasks. */
     private $TableIPv6Netmask = [];
 
-    /** Input. */
-    public $Input = '';
-
     /** Specifies the format to use for Aggregator output. 0 = CIDR notation [default]. 1 = Netmask notation. */
     private $Mode = 0;
 
