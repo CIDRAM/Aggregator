@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.0 (last modified: 2019.12.15).
+ * Aggregator v1.3.0 (last modified: 2019.12.23).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -260,7 +260,7 @@ class Aggregator
         }
         unset($InCount);
         $In = array_filter(array_unique(array_map(function ($Line) {
-            $Line = preg_replace(['~^[^\da-f:./]*~i', '~[ \t].*$~', '~[^\da-f:./]*$~i'], '', $Line);
+            $Line = preg_replace(['~^(?:#| \*|/\*).*~', '~^[^\da-f:./]*~i', '~[ \t].*$~', '~[^\da-f:./]*$~i'], '', $Line);
             if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                 $this->callbacks['newTick']();
             }
