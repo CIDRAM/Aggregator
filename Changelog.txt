@@ -7,12 +7,20 @@ Versioning guidelines for SemVer can be found at: https://semver.org/
 
 === Changes made since last versioned release ===
 
+(none)
+
+=== Version/Release 1.3.0 ===
+MINOR RELEASE.
+
 - [2019.12.12; Maikuolan]: Added some callable hooks to the IP aggregator to
   assist with benchmarking and progress reporting in some contexts (e.g., CLI).
 
 - [2019.12.23; Bug-fix; Maikuolan]: The IP aggregator was able to successfully
   capture IPs and CIDRs contained within comments, but it should be ignoring
   comments entirely; Fixed.
+
+Caleb M (Maikuolan),
+January 1, 2020.
 
 === Version/Release 1.2.0 ===
 MINOR RELEASE.
