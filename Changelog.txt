@@ -11,6 +11,11 @@ Versioning guidelines for SemVer can be found at: https://semver.org/
   be potentially accepted or produced by the aggregator in some obscure
   circumstances due an insufficiently bound regular expression; Fixed.
 
+- [2020.01.14; Bug-fix; Maikuolan]: Due to some lines mistakenly removed in an
+  earlier commit (2019.12.12), NumberEntered was failing to populate, therefore
+  causing erroneous result values to be reported when aggregating; Fixed.
+  Thanks to nistorj for reporting this bug.
+
 === Version/Release 1.3.0 ===
 MINOR RELEASE.
 
