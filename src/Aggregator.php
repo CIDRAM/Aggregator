@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.1 (last modified: 2020.01.14).
+ * Aggregator v1.3.1 (last modified: 2020.01.27).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -20,9 +20,6 @@ namespace CIDRAM\Aggregator;
 
 class Aggregator
 {
-    /** Input. */
-    public $Input = '';
-
     /** Output. */
     public $Output = '';
 
@@ -232,11 +229,17 @@ class Aggregator
         return $CIDRs;
     }
 
-    /** Aggregate it! */
+    /**
+     * Aggregate it!
+     *
+     * @param string|array $In The IPs/CIDRs/netmasks to be aggregated. Should
+     * either be a string, with entries separated by lines, or be an array, an
+     * entry to each element.
+     * @return string The aggregated data.
+     */
     public function aggregate($In)
     {
         $Begin = microtime(true);
-        $this->Input = $In;
         $this->Output = $In;
         $this->stripInvalidCharactersAndSort($this->Output);
         $this->stripInvalidRangesAndSubs($this->Output);
@@ -251,7 +254,9 @@ class Aggregator
     /** Strips invalid characters from lines and sorts entries. */
     private function stripInvalidCharactersAndSort(&$In)
     {
-        $In = explode("\n", strtolower(trim(str_replace("\r", '', $In))));
+        if (!is_array($In)) {
+            $In = explode("\n", strtolower(trim(str_replace("\r", '', $In))));
+        }
         $InCount = count($In);
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
             $this->callbacks['newParse']($InCount);
