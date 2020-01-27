@@ -364,10 +364,10 @@ class Aggregator
                 $Size = 0;
                 $CIDR = $Line;
             }
-            if ($CIDRs = $this->ExpandIPv4($CIDR)) {
+            if ($CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1)) {
                 $Type = 4;
                 $Ranges = 32;
-            } elseif ($CIDRs = $this->ExpandIPv6($CIDR)) {
+            } elseif ($CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1)) {
                 $Type = 6;
                 $Ranges = 128;
             } else {
