@@ -50,7 +50,7 @@ In the case of the above example, if this is entered as `$Input`:
 127.0.0.3
 1::
 1::1
-1:2:3:4::0
+1:2:3:4::
 1:2:3:4::1
 1:2:3:4::2
 1:2:3:4::3
