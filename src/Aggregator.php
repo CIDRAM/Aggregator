@@ -207,22 +207,19 @@ class Aggregator
                 }
             }
         }
-        if ($FactorLimit > 128) {
-            $FactorLimit = 128;
-        }
-        for ($CIDR = 0; $CIDR < $FactorLimit; $CIDR++) {
-            if (strpos($CIDRs[$CIDR], '::') !== false) {
-                $CIDRs[$CIDR] = preg_replace('/(\:0)*\:\:(0\:)*/i', '::', $CIDRs[$CIDR], 1);
-                $CIDRs[$CIDR] = str_replace('::0/', '::/', $CIDRs[$CIDR]);
+        foreach ($CIDRs as &$CIDR) {
+            if (strpos($CIDR, '::') !== false) {
+                $CIDR = preg_replace('~(?:\:0)*\:\:(?:0\:)*~i', '::', $CIDR, 1);
+                $CIDR = str_replace('::0/', '::/', $CIDR);
                 continue;
             }
-            if (strpos($CIDRs[$CIDR], ':0:0/') !== false) {
-                $CIDRs[$CIDR] = preg_replace('/(\:0){2,}\//i', '::/', $CIDRs[$CIDR], 1);
+            if (strpos($CIDR, ':0:0/') !== false) {
+                $CIDR = preg_replace('~(\:0){2,}\/~i', '::/', $CIDR, 1);
                 continue;
             }
-            if (strpos($CIDRs[$CIDR], ':0:0:') !== false) {
-                $CIDRs[$CIDR] = preg_replace('/(\:0)+\:(0\:)+/i', '::', $CIDRs[$CIDR], 1);
-                $CIDRs[$CIDR] = str_replace('::0/', '::/', $CIDRs[$CIDR]);
+            if (strpos($CIDR, ':0:0:') !== false) {
+                $CIDR = preg_replace('~(\:0)+\:(0\:)+~i', '::', $CIDR, 1);
+                $CIDR = str_replace('::0/', '::/', $CIDR);
                 continue;
             }
         }
@@ -359,32 +356,33 @@ class Aggregator
             }
             if (($RangeSep = strpos($Line, '/')) !== false) {
                 $Size = substr($Line, $RangeSep + 1);
+                if (strpos($Size, '.') !== false) {
+                    $Size = isset($this->TableIPv4Netmask[$Size]) ? $this->TableIPv4Netmask[$Size] : 0;
+                } elseif (strpos($Size, ':') !== false) {
+                    $Size = isset($this->TableIPv6Netmask[$Size]) ? $this->TableIPv6Netmask[$Size] : 0;
+                } else {
+                    $Size = (int)$Size;
+                }
                 $CIDR = substr($Line, 0, $RangeSep);
             } else {
-                $Size = 0;
+                if (strpos($Line, '.') !== false) {
+                    $Size = 32;
+                } elseif (strpos($Line, ':') !== false) {
+                    $Size = 128;
+                } else {
+                    $Size = 0;
+                }
                 $CIDR = $Line;
             }
-            if ($CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1)) {
+            if (($Size > 0 && $Size <= 32) && ($CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1))) {
                 $Type = 4;
                 $Ranges = 32;
-            } elseif ($CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1)) {
+            } elseif (($Size > 0 && $Size <= 128) && ($CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1))) {
                 $Type = 6;
                 $Ranges = 128;
             } else {
-                $Type = 0;
-                $Ranges = 0;
                 $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
                 continue;
-            }
-            if ($Type === 4 && isset($this->TableIPv4Netmask[$Size])) {
-                $Size = $this->TableIPv4Netmask[$Size];
-            } elseif ($Type === 6 && isset($this->TableIPv6Netmask[$Size])) {
-                $Size = $this->TableIPv6Netmask[$Size];
-            } else {
-                $Size = (int)$Size;
-            }
-            if ($Size === 0) {
-                $Size = $Ranges;
             }
             if (!isset($CIDRs[$Size - 1]) || $CIDRs[$Size - 1] !== $CIDR . '/' . $Size) {
                 $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
@@ -476,7 +474,7 @@ class Aggregator
             if (!$Line || ($RangeSep = strpos($Line, '/')) === false) {
                 continue;
             }
-            $Size = substr($Line, $RangeSep + 1);
+            $Size = (int)substr($Line, $RangeSep + 1);
             $CIDR = substr($Line, 0, $RangeSep);
             $Type = ($this->ExpandIPv4($CIDR, true)) ? 4 : 6;
             if ($Type === 4 && isset($this->TableNetmaskIPv4[$Size])) {

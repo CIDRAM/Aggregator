@@ -14,7 +14,7 @@ class AggregatorTest extends TestCase
 127.0.0.3
 1::
 1::1
-1:2:3:4::0
+1:2:3:4::
 1:2:3:4::1
 1:2:3:4::2
 1:2:3:4::3
@@ -65,8 +65,7 @@ QWEQWEQWE';
 127.0.0.2/31
 127.0.0.4/31
 1::/127
-1:2:3:4::1/128
-1:2:3:4::2/127
+1:2:3:4::/126
 2002::1/128';
         $Aggregator = new Aggregator();
         $Aggregator->Results = true;
@@ -84,7 +83,7 @@ QWEQWEQWE';
 127.0.0.3
 1::
 1::1
-1:2:3:4::0
+1:2:3:4::
 1:2:3:4::1
 1:2:3:4::2
 1:2:3:4::3
@@ -135,8 +134,7 @@ QWEQWEQWE';
 127.0.0.2/255.255.255.254
 127.0.0.4/255.255.255.254
 1::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe:0
-1:2:3:4::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0
-1:2:3:4::2/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe:0
+1:2:3:4::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc:0
 2002::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0';
         $Aggregator = new Aggregator(1);
         $Aggregator->Results = true;

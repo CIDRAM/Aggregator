@@ -105,8 +105,7 @@ QWEQWEQWE
 127.0.0.2/31
 127.0.0.4/31
 1::/127
-1:2:3:4::1/128
-1:2:3:4::2/127
+1:2:3:4::/126
 2002::1/128
 ```
 
@@ -172,8 +171,7 @@ In the case of the example input mentioned earlier, the output should look somet
 127.0.0.2/255.255.255.254
 127.0.0.4/255.255.255.254
 1::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe:0
-1:2:3:4::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0
-1:2:3:4::2/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe:0
+1:2:3:4::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc:0
 2002::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0
 ```
 
@@ -191,4 +189,4 @@ Please use the issues page of this repository.
 ---
 
 
-Last Updated: 9 January 2019 (2019.01.09).
+Last Updated: 27 January 2019 (2019.01.27).
