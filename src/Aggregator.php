@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.1 (last modified: 2020.01.27).
+ * Aggregator v1.3.1 (last modified: 2020.02.05).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -345,6 +345,27 @@ class Aggregator
         }
         $In = $Out = "\n" . $In . "\n";
         $Offset = 0;
+        $Low = [4 => 1, 6 => 1];
+        foreach ([
+            [4, '(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])', 33],
+            [6,
+                '(?:(?:(?:[\da-f]{1,4}\:){7}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){6}\:[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){5}\:(?:[\da-f]{1,4}\:)?[\da-f]{1,4}' .
+                ')|(?:(?:[\da-f]{1,4}\:){4}\:(?:[\da-f]{1,4}\:){0,2}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){3}\:(?:[\da-f]{1,4}\:){0,3}[\da-f]{1,4})|(?:(?:[\da' .
+                '-f]{1,4}\:){2}\:(?:[\da-f]{1,4}\:){0,4}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){6}(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b' .
+                ').){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:(?:[\da-f]{1,4}\:){0,5}\:(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]' .
+                '\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:\:\:(?:[\da-f]{1,4}\:){0,5}(?:(?:\b(?:(?:25[0-5])|' .
+                '(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:[\da-f]{1,4}\:\:(?:[\da-f]{1,4' .
+                '}\:){0,5}[\da-f]{1,4})|(?:\:\:(?:[\da-f]{1,4}\:){0,6}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){1,7}\:))',
+            129],
+        ] as $Lows) {
+            for ($Iterant = 1; $Iterant < $Lows[2]; $Iterant++) {
+                $Low[$Lows[0]] = $Iterant;
+                if (preg_match('~\n' . $Lows[1] . '/' . $Iterant . '(?:$|\D)~i', $In)) {
+                    break;
+                }
+            }
+        }
+        unset($Lows);
         while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
             if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                 $this->callbacks['newTick']();
@@ -389,7 +410,8 @@ class Aggregator
                 continue;
             }
             $Out = str_replace("\n" . $Line . "\n", "\n" . $CIDRs[$Size - 1] . "\n", $Out);
-            for ($Range = $Size - 2; $Range >= 0; $Range--) {
+            $ThisLow = ($Type === 4 ? $Low[4] : $Low[6]) - 1;
+            for ($Range = $Size - 2; $Range >= $ThisLow; $Range--) {
                 if (isset($CIDRs[$Range]) && strpos($Out, "\n" . $CIDRs[$Range] . "\n") !== false) {
                     $Out = str_replace("\n" . $CIDRs[$Size - 1] . "\n", "\n", $Out);
                     if (!empty($this->Results)) {
