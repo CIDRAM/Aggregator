@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.1 (last modified: 2020.02.05).
+ * Aggregator v1.3.1 (last modified: 2020.02.08).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -334,6 +334,7 @@ class Aggregator
             }
             return $Compare < 0 ? -1 : 1;
         });
+
         $In = implode("\n", $In);
     }
 
@@ -397,10 +398,8 @@ class Aggregator
             }
             if (($Size > 0 && $Size <= 32) && ($CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1))) {
                 $Type = 4;
-                $Ranges = 32;
             } elseif (($Size > 0 && $Size <= 128) && ($CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1))) {
                 $Type = 6;
-                $Ranges = 128;
             } else {
                 $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
                 continue;
@@ -439,7 +438,7 @@ class Aggregator
             }
             $In = $Out = "\n" . $In . "\n";
             $Size = $Offset = 0;
-            $CIDR = $Line = '';
+            $Line = '';
             $CIDRs = false;
             while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
                 if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
