@@ -1,0 +1,88 @@
+Generated: 2020.02.16 22:27 UTC+0800 using PHP 7.4.1
+System: Windows 10 Home x64, 8GB RAM, AMD A10-8700P Radeon R6 4C+6G/1.80GHz.
+
+Aggregator Benchmarks.
+===
+
+Aggregating 1,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 0.30416011810303 seconds
+Iteration 2: 0.24873614311218 seconds
+Iteration 3: 0.2512800693512 seconds
+Average time: 0.26805877685547 seconds
+
+
+Aggregating 1,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 0.47209405899048 seconds
+Iteration 2: 0.44880485534668 seconds
+Iteration 3: 0.4348258972168 seconds
+Average time: 0.45190827051799 seconds
+
+
+Aggregating 5,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 2.9636359214783 seconds
+Iteration 2: 2.8205618858337 seconds
+Iteration 3: 3.1395859718323 seconds
+Average time: 2.9745945930481 seconds
+
+
+Aggregating 5,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 7.2216868400574 seconds
+Iteration 2: 6.3239941596985 seconds
+Iteration 3: 6.3605780601501 seconds
+Average time: 6.6354196866353 seconds
+
+
+Aggregating 10,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 9.107794046402 seconds
+Iteration 2: 9.233412027359 seconds
+Iteration 3: 10.589750051498 seconds
+Average time: 9.6436520417531 seconds
+
+
+Aggregating 10,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 25.068593978882 seconds
+Iteration 2: 30.529397010803 seconds
+Iteration 3: 32.182762861252 seconds
+Average time: 29.260251283646 seconds
+
+
+Aggregating 20,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 58.215924978256 seconds
+Iteration 2: 54.149658918381 seconds
+Iteration 3: 53.645915985107 seconds
+Average time: 55.337166627248 seconds
+
+
+Aggregating 20,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 150.7880718708 seconds
+Iteration 2: 152.01976585388 seconds
+Iteration 3: 139.97001504898 seconds
+Average time: 147.59261759122 seconds
+
+
+Aggregating 50,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 261.9621989727 seconds
+Iteration 2: 260.28996515274 seconds
+Iteration 3: 282.08100700378 seconds
+Average time: 268.11105704308 seconds
+
+
+Aggregating 50,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 915.34364199638 seconds
+Iteration 2: 847.58106780052 seconds
+Iteration 3: 745.74548888206 seconds
+Average time: 836.22339955966 seconds
+
+
+Aggregating 100,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 841.79229807854 seconds
+Iteration 2: 861.2343609333 seconds
+Iteration 3: 857.35292696953 seconds
+Average time: 853.45986199379 seconds
+
+
+Aggregating 100,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 2427.4008698463 seconds
+Iteration 2: 2380.1490700245 seconds
+Iteration 3: 2446.4187259674 seconds
+Average time: 2417.9895552794 seconds
