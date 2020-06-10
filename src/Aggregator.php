@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.1 (last modified: 2020.02.08).
+ * Aggregator v1.3.1 (last modified: 2020.06.11).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -20,46 +20,74 @@ namespace CIDRAM\Aggregator;
 
 class Aggregator
 {
-    /** Output. */
+    /**
+     * @var string Output.
+     */
     public $Output = '';
 
-    /** Results switch. */
+    /**
+     * @var bool Results switch.
+     */
     public $Results = false;
 
-    /** Number of lines for aggregation entered. */
+    /**
+     * @var int Number of lines for aggregation entered.
+     */
     public $NumberEntered = 0;
 
-    /** Number of lines for aggregation rejected. */
+    /**
+     * @var int Number of lines for aggregation rejected.
+     */
     public $NumberRejected = 0;
 
-    /** Number of lines for aggregation accepted. */
+    /**
+     * @var int Number of lines for aggregation accepted.
+     */
     public $NumberAccepted = 0;
 
-    /** Number of lines aggregated or merged. */
+    /**
+     * @var int Number of lines aggregated or merged.
+     */
     public $NumberMerged = 0;
 
-    /** Number of lines returned. */
+    /**
+     * @var int Number of lines returned.
+     */
     public $NumberReturned = 0;
 
-    /** Time consumed while aggregating data. */
+    /**
+     * @var int Time consumed while aggregating data.
+     */
     public $ProcessingTime = 0;
 
-    /** Conversion tables for netmasks to IPv4. */
+    /**
+     * @var array Conversion tables for netmasks to IPv4.
+     */
     private $TableNetmaskIPv4 = [];
 
-    /** Conversion tables for netmasks to IPv6. */
+    /**
+     * @var array Conversion tables for netmasks to IPv6.
+     */
     private $TableNetmaskIPv6 = [];
 
-    /** Conversion tables for IPv4 to netmasks. */
+    /**
+     * @var array Conversion tables for IPv4 to netmasks.
+     */
     private $TableIPv4Netmask = [];
 
-    /** Conversion tables for IPv6 to netmasks. */
+    /**
+     * @var array Conversion tables for IPv6 to netmasks.
+     */
     private $TableIPv6Netmask = [];
 
-    /** Specifies the format to use for Aggregator output. 0 = CIDR notation [default]. 1 = Netmask notation. */
+    /**
+     * @var int Specifies the format to use for Aggregator output. 0 = CIDR notation [default]. 1 = Netmask notation.
+     */
     private $Mode = 0;
 
-    /** Optional callback. */
+    /**
+     * @var array Optional callbacks.
+     */
     public $callbacks = [];
 
     public function __construct($Mode = 0)
@@ -230,8 +258,8 @@ class Aggregator
      * Aggregate it!
      *
      * @param string|array $In The IPs/CIDRs/netmasks to be aggregated. Should
-     * either be a string, with entries separated by lines, or be an array, an
-     * entry to each element.
+     *          either be a string, with entries separated by lines, or an
+     *          array with an entry to each element.
      * @return string The aggregated data.
      */
     public function aggregate($In)
@@ -248,7 +276,11 @@ class Aggregator
         return $this->Output;
     }
 
-    /** Strips invalid characters from lines and sorts entries. */
+    /**
+     * Strips invalid characters from lines and sorts entries.
+     *
+     * @param string|array
+     */
     private function stripInvalidCharactersAndSort(&$In)
     {
         if (!is_array($In)) {
@@ -338,7 +370,11 @@ class Aggregator
         $In = implode("\n", $In);
     }
 
-    /** Strips invalid ranges and subordinates. */
+    /**
+     * Strips invalid ranges and subordinates.
+     *
+     * @param string
+     */
     private function stripInvalidRangesAndSubs(&$In)
     {
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
@@ -428,7 +464,11 @@ class Aggregator
         }
     }
 
-    /** Merges ranges. */
+    /**
+     * Merges ranges.
+     *
+     * @param string
+     */
     private function mergeRanges(&$In)
     {
         while (true) {
@@ -478,7 +518,11 @@ class Aggregator
         }
     }
 
-    /** Optionally converts output to netmask notation. */
+    /**
+     * Optionally converts output to netmask notation.
+     *
+     * @param string
+     */
     private function convertToNetmasks(&$In)
     {
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
