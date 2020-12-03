@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.1 (last modified: 2020.06.11).
+ * Aggregator v1.3.2 (last modified: 2020.12.04).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -194,7 +194,8 @@ class Aggregator
             '2[0-4]\d)|(\d{1,2}))\b))|([\da-f]{1,4}\:\:([\da-f]{1,4}\:){0,5}[\da-f]{1' .
             ',4})|(\:\:([\da-f]{1,4}\:){0,6}[\da-f]{1,4})|(([\da-f]{1,4}\:){1,7}\:))$' .
             '/i',
-        $Addr)) {
+            $Addr
+        )) {
             return false;
         }
         if ($ValidateOnly) {
