@@ -113,19 +113,31 @@ if ($ExpectedOutput !== $Aggregated) {
 }
 
 $Aggregator = new \CIDRAM\Aggregator\Aggregator();
-$Out = $Aggregator->ExpandIPv4('127.0.0.1');
 
-if ('cd37d1d14133dfd75f9dd13414cdcd76' !== hash('md5', serialize($Out))) {
-    echo 'ExpandIPv4 output does not match expected output!' . PHP_EOL;
-    exit(3);
+foreach ([
+    ['127.0.0.1', 'b86ad9164b62e5a0652a160c98a29d043f68310b'],
+    ['192.168.0.1', '7687472bc75a1e51f9d4589d6a1c9499ce2b5f09'],
+    ['0.0.0.0', 'c0c337c3cd4f1ae74f6b0c1533b8618b563e04e4'],
+    ['255.255.255.255', '235ad902a411ef86475e13d2cfb575385794a627']
+] as $Try) {
+    $Out = $Aggregator->ExpandIPv4($Try[0]);
+    if ($Try[1] !== hash('sha1', serialize($Out))) {
+        echo 'ExpandIPv4 output does not match expected output!' . PHP_EOL;
+        exit(3);
+    }
 }
 
-$Aggregator = new \CIDRAM\Aggregator\Aggregator();
-$Out = $Aggregator->ExpandIPv6('2002::1');
-
-if ('149e73862203bf6ae504a2474f7c12a8' !== hash('md5', serialize($Out))) {
-    echo 'ExpandIPv6 output does not match expected output!' . PHP_EOL;
-    exit(4);
+foreach ([
+    ['2002::1', 'f15b0da4ec536dd06e1a41f09abe4ee141663bdf'],
+    ['1234:5678::89ab:cdef', 'fefa598e549cfe16dee38ca0470d47b8ab0a0104'],
+    ['::1', '703648258c947581c381509d717bd4bdaaa87284'],
+    ['1::', '59f3adbb5f677d4596b88e766425ef5f6252f1e0']
+] as $Try) {
+    $Out = $Aggregator->ExpandIPv6($Try[0]);
+    if ($Try[1] !== hash('sha1', serialize($Out))) {
+        echo 'ExpandIPv6 output does not match expected output!' . PHP_EOL;
+        exit(4);
+    }
 }
 
 echo 'All tests passed.' . PHP_EOL;

@@ -202,13 +202,13 @@ class Aggregator
             return true;
         }
         $NAddr = $Addr;
-        if (preg_match('/^\:\:/i', $NAddr)) {
+        if (substr($NAddr, 0, 2) === '::') {
             $NAddr = '0' . $NAddr;
         }
-        if (preg_match('/\:\:$/i', $NAddr)) {
+        if (substr($NAddr, -2) === '::') {
             $NAddr .= '0';
         }
-        if (substr_count($NAddr, '::')) {
+        if (strpos($NAddr, '::') !== false) {
             $c = 7 - substr_count($Addr, ':');
             $Arr = [':0:', ':0:0:', ':0:0:0:', ':0:0:0:0:', ':0:0:0:0:0:', ':0:0:0:0:0:0:'];
             if (!isset($Arr[$c])) {
@@ -367,7 +367,6 @@ class Aggregator
             }
             return $Compare < 0 ? -1 : 1;
         });
-
         $In = implode("\n", $In);
     }
 
