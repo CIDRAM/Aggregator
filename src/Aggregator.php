@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.2 (last modified: 2020.12.04).
+ * Aggregator v1.3.2 (last modified: 2021.07.10).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -90,6 +90,11 @@ class Aggregator
      */
     public $callbacks = [];
 
+    /**
+     * Constructor.
+     *
+     * @return void
+     */
     public function __construct($Mode = 0)
     {
         $this->constructTables();
