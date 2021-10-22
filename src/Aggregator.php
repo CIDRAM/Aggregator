@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.2 (last modified: 2021.07.10).
+ * Aggregator v1.3.3 (last modified: 2021.10.22).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -101,7 +101,11 @@ class Aggregator
         $this->Mode = $Mode;
     }
 
-    /** Construct netmask<->CIDR conversion tables. */
+    /**
+     * Construct netmask<->CIDR conversion tables.
+     *
+     * @return void
+     */
     private function constructTables()
     {
         $CIDR = 32;
@@ -142,7 +146,7 @@ class Aggregator
     public function ExpandIPv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
     {
         if (!preg_match(
-            '/^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$/i',
+            '/^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$/',
             $Addr,
             $Octets
         )) {
@@ -182,23 +186,23 @@ class Aggregator
     public function ExpandIPv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
     {
         /**
-         * The REGEX pattern used by this `preg_match` call was adapted from the
-         * IPv6 REGEX pattern that can be found at
-         * http://sroze.io/2008/10/09/regex-ipv4-et-ipv6/
+         * The pattern used by this `preg_match` call was adapted from the IPv6
+         * pattern that can be found at
+         * @link https://sroze.io/regex-ip-v4-et-ipv6-6cc005cabe8c
          */
         if (!preg_match(
-            '/^((([\da-f]{1,4}\:){7}[\da-f]{1,4})|(([\da-f]{1,4}\:){6}\:[\da-f]{1,4})' .
-            '|(([\da-f]{1,4}\:){5}\:([\da-f]{1,4}\:)?[\da-f]{1,4})|(([\da-f]{1,4}\:){' .
-            '4}\:([\da-f]{1,4}\:){0,2}[\da-f]{1,4})|(([\da-f]{1,4}\:){3}\:([\da-f]{1,' .
-            '4}\:){0,3}[\da-f]{1,4})|(([\da-f]{1,4}\:){2}\:([\da-f]{1,4}\:){0,4}[\da-' .
-            'f]{1,4})|(([\da-f]{1,4}\:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}' .
-            '))\b).){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([\da-f]{1,4' .
-            '}\:){0,5}\:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((25[' .
-            '0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(\:\:([\da-f]{1,4}\:){0,5}((\b(' .
-            '(25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((25[0-5])|(1\d{2})|(' .
-            '2[0-4]\d)|(\d{1,2}))\b))|([\da-f]{1,4}\:\:([\da-f]{1,4}\:){0,5}[\da-f]{1' .
-            ',4})|(\:\:([\da-f]{1,4}\:){0,6}[\da-f]{1,4})|(([\da-f]{1,4}\:){1,7}\:))$' .
-            '/i',
+            '/^((([\da-f]{1,4}:){7}[\da-f]{1,4})|(([\da-f]{1,4}:){6}:[\da-f]{1,4})' .
+            '|(([\da-f]{1,4}:){5}:([\da-f]{1,4}:)?[\da-f]{1,4})|(([\da-f]{1,4}:){4' .
+            '}:([\da-f]{1,4}:){0,2}[\da-f]{1,4})|(([\da-f]{1,4}:){3}:([\da-f]{1,4}' .
+            ':){0,3}[\da-f]{1,4})|(([\da-f]{1,4}:){2}:([\da-f]{1,4}:){0,4}[\da-f]{' .
+            '1,4})|(([\da-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2})' .
+            ')\b).){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([\da-f]{1' .
+            ',4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((' .
+            '25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([\da-f]{1,4}:){0,5}((' .
+            '\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((25[0-5])|(1\d' .
+            '{2})|(2[0-4]\d)|(\d{1,2}))\b))|([\da-f]{1,4}::([\da-f]{1,4}:){0,5}[\d' .
+            'a-f]{1,4})|(::([\da-f]{1,4}:){0,6}[\da-f]{1,4})|(([\da-f]{1,4}:){1,7}' .
+            ':))$/i',
             $Addr
         )) {
             return false;
@@ -214,13 +218,13 @@ class Aggregator
             $NAddr .= '0';
         }
         if (strpos($NAddr, '::') !== false) {
-            $c = 7 - substr_count($Addr, ':');
+            $Key = 7 - substr_count($Addr, ':');
             $Arr = [':0:', ':0:0:', ':0:0:0:', ':0:0:0:0:', ':0:0:0:0:0:', ':0:0:0:0:0:0:'];
-            if (!isset($Arr[$c])) {
+            if (!isset($Arr[$Key])) {
                 return false;
             }
-            $NAddr = str_replace('::', $Arr[$c], $Addr);
-            unset($Arr);
+            $NAddr = str_replace('::', $Arr[$Key], $Addr);
+            unset($Arr, $Key);
         }
         $NAddr = explode(':', $NAddr);
         if (count($NAddr) !== 8) {
@@ -286,6 +290,7 @@ class Aggregator
      * Strips invalid characters from lines and sorts entries.
      *
      * @param string|array
+     * @return void
      */
     private function stripInvalidCharactersAndSort(&$In)
     {
@@ -379,6 +384,7 @@ class Aggregator
      * Strips invalid ranges and subordinates.
      *
      * @param string
+     * @return void
      */
     private function stripInvalidRangesAndSubs(&$In)
     {
@@ -391,13 +397,13 @@ class Aggregator
         foreach ([
             [4, '(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])', 33],
             [6,
-                '(?:(?:(?:[\da-f]{1,4}\:){7}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){6}\:[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){5}\:(?:[\da-f]{1,4}\:)?[\da-f]{1,4}' .
-                ')|(?:(?:[\da-f]{1,4}\:){4}\:(?:[\da-f]{1,4}\:){0,2}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){3}\:(?:[\da-f]{1,4}\:){0,3}[\da-f]{1,4})|(?:(?:[\da' .
-                '-f]{1,4}\:){2}\:(?:[\da-f]{1,4}\:){0,4}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){6}(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b' .
-                ').){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:(?:[\da-f]{1,4}\:){0,5}\:(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]' .
-                '\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:\:\:(?:[\da-f]{1,4}\:){0,5}(?:(?:\b(?:(?:25[0-5])|' .
-                '(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:[\da-f]{1,4}\:\:(?:[\da-f]{1,4' .
-                '}\:){0,5}[\da-f]{1,4})|(?:\:\:(?:[\da-f]{1,4}\:){0,6}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}\:){1,7}\:))',
+                '(?:(?:(?:[\da-f]{1,4}:){7}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}:){6}:[\da-f]{1,4})|(?:(?:[\da-f]{1,4}:){5}:(?:[\da-f]{1,4}:)?[\da-f]{1,4}' .
+                ')|(?:(?:[\da-f]{1,4}:){4}:(?:[\da-f]{1,4}:){0,2}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}:){3}:(?:[\da-f]{1,4}:){0,3}[\da-f]{1,4})|(?:(?:[\da' .
+                '-f]{1,4}:){2}:(?:[\da-f]{1,4}:){0,4}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}:){6}(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b' .
+                ').){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:(?:[\da-f]{1,4}:){0,5}:(?:(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]' .
+                '\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:::(?:[\da-f]{1,4}:){0,5}(?:(?:\b(?:(?:25[0-5])|' .
+                '(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b).){3}(?:\b(?:(?:25[0-5])|(?:1\d{2})|(?:2[0-4]\d)|(?:\d{1,2}))\b))|(?:[\da-f]{1,4}::(?:[\da-f]{1,4' .
+                '}:){0,5}[\da-f]{1,4})|(?:::(?:[\da-f]{1,4}:){0,6}[\da-f]{1,4})|(?:(?:[\da-f]{1,4}:){1,7}:))',
             129],
         ] as $Lows) {
             for ($Iterant = 1; $Iterant < $Lows[2]; $Iterant++) {
@@ -473,6 +479,7 @@ class Aggregator
      * Merges ranges.
      *
      * @param string
+     * @return void
      */
     private function mergeRanges(&$In)
     {
@@ -527,6 +534,7 @@ class Aggregator
      * Optionally converts output to netmask notation.
      *
      * @param string
+     * @return void
      */
     private function convertToNetmasks(&$In)
     {
@@ -557,7 +565,11 @@ class Aggregator
         $In = trim($Out);
     }
 
-    /** Resets numbers. */
+    /**
+     * Resets numbers.
+     *
+     * @return void
+     */
     public function resetNumbers()
     {
         $this->NumberEntered = 0;
