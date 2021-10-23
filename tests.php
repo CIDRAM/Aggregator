@@ -140,5 +140,19 @@ foreach ([
     }
 }
 
+$TestInput = '1.0.0.0/32
+1.0.0.0';
+
+$ExpectedOutput = '1.0.0.0/32';
+
+$Aggregator = new \CIDRAM\Aggregator\Aggregator();
+$Aggregator->Results = true;
+$Aggregated = $Aggregator->aggregate($TestInput);
+
+if ($ExpectedOutput !== $Aggregated) {
+    echo 'Output is bugged.' . PHP_EOL;
+    exit(5);
+}
+
 echo 'All tests passed.' . PHP_EOL;
 exit(0);

@@ -5,9 +5,10 @@
     "homepage": "https://cidram.github.io/",
     "license": "GPL-2.0-or-later",
     "support": {
-        "chat": "https://gitter.im/CIDRAM/Lobby",
         "issues": "https://github.com/CIDRAM/Aggregator/issues",
-        "source": "https://github.com/CIDRAM/Aggregator"
+        "source": "https://github.com/CIDRAM/Aggregator",
+        "rss": "https://github.com/CIDRAM/Aggregator/releases.atom",
+        "chat": "https://gitter.im/CIDRAM/Lobby"
     },
     "require": {
         "php": ">=5.4.0",
