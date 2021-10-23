@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.3 (last modified: 2021.10.22).
+ * Aggregator v1.3.3 (last modified: 2021.10.23).
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
@@ -81,7 +81,9 @@ class Aggregator
     private $TableIPv6Netmask = [];
 
     /**
-     * @var int Specifies the format to use for Aggregator output. 0 = CIDR notation [default]. 1 = Netmask notation.
+     * @var int Specifies the format to use for Aggregator output.
+     *      0 = CIDR notation [default].
+     *      1 = Netmask notation.
      */
     private $Mode = 0;
 
@@ -247,16 +249,16 @@ class Aggregator
         }
         foreach ($CIDRs as &$CIDR) {
             if (strpos($CIDR, '::') !== false) {
-                $CIDR = preg_replace('~(?:\:0)*\:\:(?:0\:)*~i', '::', $CIDR, 1);
+                $CIDR = preg_replace('~(?::0)*::(?:0:)*~i', '::', $CIDR, 1);
                 $CIDR = str_replace('::0/', '::/', $CIDR);
                 continue;
             }
             if (strpos($CIDR, ':0:0/') !== false) {
-                $CIDR = preg_replace('~(\:0){2,}\/~i', '::/', $CIDR, 1);
+                $CIDR = preg_replace('~(:0){2,}\/~i', '::/', $CIDR, 1);
                 continue;
             }
             if (strpos($CIDR, ':0:0:') !== false) {
-                $CIDR = preg_replace('~(\:0)+\:(0\:)+~i', '::', $CIDR, 1);
+                $CIDR = preg_replace('~(:0)+:(0:)+~i', '::', $CIDR, 1);
                 $CIDR = str_replace('::0/', '::/', $CIDR);
                 continue;
             }
