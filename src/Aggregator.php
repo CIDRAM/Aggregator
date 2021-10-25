@@ -21,9 +21,9 @@ namespace CIDRAM\Aggregator;
 class Aggregator
 {
     /**
-     * @var string Output.
+     * @var string|array Output.
      */
-    public string $Output = '';
+    public string|array $Output = '';
 
     /**
      * @var bool Results switch.
@@ -397,7 +397,7 @@ class Aggregator
     /**
      * Strips invalid ranges and subordinates.
      *
-     * @param string
+     * @param string|array
      *
      * @return void
      */
