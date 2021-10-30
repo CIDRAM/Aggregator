@@ -61,6 +61,11 @@ class Aggregator
     public $ProcessingTime = 0;
 
     /**
+     * @var array Optional callbacks.
+     */
+    public $callbacks = [];
+
+    /**
      * @var array Conversion tables for netmasks to IPv4.
      */
     private $TableNetmaskIPv4 = [];
@@ -88,11 +93,6 @@ class Aggregator
     private $Mode = 0;
 
     /**
-     * @var array Optional callbacks.
-     */
-    public $callbacks = [];
-
-    /**
      * Constructor.
      *
      * @return void
@@ -101,35 +101,6 @@ class Aggregator
     {
         $this->constructTables();
         $this->Mode = $Mode;
-    }
-
-    /**
-     * Construct netmask<->CIDR conversion tables.
-     *
-     * @return void
-     */
-    private function constructTables()
-    {
-        $CIDR = 32;
-        for ($Octet = 4; $Octet > 0; $Octet--) {
-            $Base = str_repeat('255.', $Octet - 1);
-            $End = str_repeat('.0', 4 - $Octet);
-            for ($Addresses = 1, $Iterate = 0; $Iterate < 8; $Iterate++, $Addresses *= 2, $CIDR--) {
-                $Netmask = $Base . (256 - $Addresses) . $End;
-                $this->TableNetmaskIPv4[$CIDR] = $Netmask;
-                $this->TableIPv4Netmask[$Netmask] = $CIDR;
-            }
-        }
-        $CIDR = 128;
-        for ($Octet = 8; $Octet > 0; $Octet--) {
-            $Base = str_repeat('ffff:', $Octet - 1);
-            $End = ($Octet === 8) ? ':0' : '::';
-            for ($Addresses = 1, $Iterate = 0; $Iterate < 16; $Iterate++, $Addresses *= 2, $CIDR--) {
-                $Netmask = $Base . (dechex(65536 - $Addresses)) . $End;
-                $this->TableNetmaskIPv6[$CIDR] = $Netmask;
-                $this->TableIPv6Netmask[$Netmask] = $CIDR;
-            }
-        }
     }
 
     /**
@@ -286,6 +257,50 @@ class Aggregator
         }
         $this->ProcessingTime = microtime(true) - $Begin;
         return $this->Output;
+    }
+
+    /**
+     * Resets numbers.
+     *
+     * @return void
+     */
+    public function resetNumbers()
+    {
+        $this->NumberEntered = 0;
+        $this->NumberRejected = 0;
+        $this->NumberAccepted = 0;
+        $this->NumberMerged = 0;
+        $this->NumberReturned = 0;
+        $this->ProcessingTime = 0;
+    }
+
+    /**
+     * Construct netmask<->CIDR conversion tables.
+     *
+     * @return void
+     */
+    private function constructTables()
+    {
+        $CIDR = 32;
+        for ($Octet = 4; $Octet > 0; $Octet--) {
+            $Base = str_repeat('255.', $Octet - 1);
+            $End = str_repeat('.0', 4 - $Octet);
+            for ($Addresses = 1, $Iterate = 0; $Iterate < 8; $Iterate++, $Addresses *= 2, $CIDR--) {
+                $Netmask = $Base . (256 - $Addresses) . $End;
+                $this->TableNetmaskIPv4[$CIDR] = $Netmask;
+                $this->TableIPv4Netmask[$Netmask] = $CIDR;
+            }
+        }
+        $CIDR = 128;
+        for ($Octet = 8; $Octet > 0; $Octet--) {
+            $Base = str_repeat('ffff:', $Octet - 1);
+            $End = ($Octet === 8) ? ':0' : '::';
+            for ($Addresses = 1, $Iterate = 0; $Iterate < 16; $Iterate++, $Addresses *= 2, $CIDR--) {
+                $Netmask = $Base . (dechex(65536 - $Addresses)) . $End;
+                $this->TableNetmaskIPv6[$CIDR] = $Netmask;
+                $this->TableIPv6Netmask[$Netmask] = $CIDR;
+            }
+        }
     }
 
     /**
@@ -567,20 +582,5 @@ class Aggregator
             $Out = str_replace("\n" . $Line . "\n", "\n" . $CIDR . '/' . $Size . "\n", $Out);
         }
         $In = trim($Out);
-    }
-
-    /**
-     * Resets numbers.
-     *
-     * @return void
-     */
-    public function resetNumbers()
-    {
-        $this->NumberEntered = 0;
-        $this->NumberRejected = 0;
-        $this->NumberAccepted = 0;
-        $this->NumberMerged = 0;
-        $this->NumberReturned = 0;
-        $this->ProcessingTime = 0;
     }
 }
