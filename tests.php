@@ -1,12 +1,12 @@
 <?php
 /**
- * Aggregator tests.
- *
- * Homepage: https://cidram.github.io/
- *
- * Documentation: https://github.com/CIDRAM/Aggregator/blob/master/README.md
+ * Aggregator tests (last modified: 2022.02.12).
+ * @link https://github.com/CIDRAM/Aggregator
  *
  * AGGREGATOR COPYRIGHT 2017 and beyond by Caleb Mazalevskis (Maikuolan).
+ *
+ * License: GNU/GPLv2
+ * @see LICENSE.txt
  */
 
 // Prevent running tests outside of Composer (if the package is deployed

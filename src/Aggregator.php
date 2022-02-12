@@ -1,18 +1,14 @@
 <?php
 /**
- * Aggregator v1.3.4 (last modified: 2021.10.30).
+ * Aggregator v1.3.4 (last modified: 2022.02.12).
+ * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
  * aggregator from CIDRAM.
  *
- * Homepage: https://cidram.github.io/
- *
- * Documentation: https://github.com/CIDRAM/Aggregator/blob/master/README.md
- *
  * AGGREGATOR COPYRIGHT 2017 and beyond by Caleb Mazalevskis (Maikuolan).
  *
  * License: GNU/GPLv2
- *
  * @see LICENSE.txt
  */
 
