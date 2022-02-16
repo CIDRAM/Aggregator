@@ -9,9 +9,12 @@
  * @see LICENSE.txt
  */
 
-// Prevent running tests outside of Composer (if the package is deployed
-// somewhere live with this file still intact, useful to prevent hammering and
-// cycles being needlessly wasted).
+/**
+ * If this file remains intact after deploying the package to production,
+ * preventing it from running outside of Composer may be useful as a means of
+ * prevent potential attackers from hammering the file and needlessly wasting
+ * cycles at the server.
+ */
 if (!isset($_SERVER['COMPOSER_BINARY'])) {
     die;
 }
