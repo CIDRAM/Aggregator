@@ -16,7 +16,7 @@ namespace CIDRAM\Aggregator;
 
 class Aggregator
 {
-    use \CIDRAM\CIDRAM\Expand;
+    use Expand;
 
     /**
      * @var string|array Output.

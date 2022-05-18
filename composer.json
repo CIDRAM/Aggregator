@@ -16,8 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CIDRAM\\Aggregator\\": "src/",
-            "CIDRAM\\CIDRAM\\": "src/"
+            "CIDRAM\\Aggregator\\": "src/"
         },
         "files": ["src/helpers.php"]
     },

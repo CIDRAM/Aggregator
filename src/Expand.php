@@ -1,17 +1,18 @@
 <?php
 /**
- * This file is an optional extension of the CIDRAM package.
- * Homepage: https://cidram.github.io/
+ * Aggregator v1.3.4 (last modified: 2022.05.18).
+ * @link https://github.com/CIDRAM/Aggregator
  *
- * CIDRAM COPYRIGHT 2016 and beyond by Caleb Mazalevskis (Maikuolan).
+ * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
+ * aggregator from CIDRAM.
+ *
+ * AGGREGATOR COPYRIGHT 2017 and beyond by Caleb Mazalevskis (Maikuolan).
  *
  * License: GNU/GPLv2
  * @see LICENSE.txt
- *
- * This file: Methods to expand CIDRs (last modified: 2022.05.18).
  */
 
-namespace CIDRAM\CIDRAM;
+namespace CIDRAM\Aggregator;
 
 trait Expand
 {
@@ -26,7 +27,7 @@ trait Expand
      * @param int $FactorLimit Maximum number of CIDRs to return (default: 32).
      * @return bool|array Refer to the description above.
      */
-    function expandIpv4(string $Addr, bool $ValidateOnly = false, int $FactorLimit = 32)
+    function expandIpv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
     {
         if (!preg_match(
             '/^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$/',
@@ -64,7 +65,7 @@ trait Expand
      * @param int $FactorLimit Maximum number of CIDRs to return (default: 128).
      * @return bool|array Refer to the description above.
      */
-    function expandIpv6(string $Addr, bool $ValidateOnly = false, int $FactorLimit = 128)
+    function expandIpv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
     {
         /**
          * The pattern used by this `preg_match` call was adapted from the IPv6
