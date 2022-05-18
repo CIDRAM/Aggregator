@@ -27,7 +27,7 @@ trait Expand
      * @param int $FactorLimit Maximum number of CIDRs to return (default: 32).
      * @return bool|array Refer to the description above.
      */
-    function expandIpv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
+    public function expandIpv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
     {
         if (!preg_match(
             '/^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$/',
@@ -65,7 +65,7 @@ trait Expand
      * @param int $FactorLimit Maximum number of CIDRs to return (default: 128).
      * @return bool|array Refer to the description above.
      */
-    function expandIpv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
+    public function expandIpv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
     {
         /**
          * The pattern used by this `preg_match` call was adapted from the IPv6
