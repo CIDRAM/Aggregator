@@ -12,7 +12,7 @@ A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDR
 
 ### How to install:
 
-As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the class, [Aggregator.php](src/Aggregator.php), directly from this repository, and copy it to any projects that need it, or, if you'd prefer, you can install it using Composer:
+Installing the Aggregator is exceptionally easy. You can download the necessary files directly from the `src` directory, and then copy them to any projects that need it, or, if you'd prefer, you can install it using Composer:
 
 `composer require cidram/aggregator`
 
@@ -189,4 +189,4 @@ Please use the issues page of this repository.
 ---
 
 
-Last Updated: 27 January 2019 (2019.01.27).
+Last Updated: 18 May 2022 (2022.05.18).
