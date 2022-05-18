@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.4 (last modified: 2022.02.12).
+ * Aggregator v1.3.4 (last modified: 2022.05.18).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -16,6 +16,8 @@ namespace CIDRAM\Aggregator;
 
 class Aggregator
 {
+    use \CIDRAM\CIDRAM\Expand;
+
     /**
      * @var string|array Output.
      */
@@ -91,146 +93,15 @@ class Aggregator
     /**
      * Constructor.
      *
+     * @param int $Mode Specifies the format to use for Aggregator output.
+     *      0 = CIDR notation [default].
+     *      1 = Netmask notation.
      * @return void
      */
     public function __construct($Mode = 0)
     {
         $this->constructTables();
         $this->Mode = $Mode;
-    }
-
-    /**
-     * Tests whether $Addr is an IPv4 address, and if it is, expands its potential
-     * factors (i.e., constructs an array containing the CIDRs that contain $Addr).
-     * Returns false if $Addr is *not* an IPv4 address, and otherwise, returns the
-     * contructed array.
-     *
-     * Adapted from CIDRAM/CIDRAM->vault/functions.php->$CIDRAM['ExpandIPv4']().
-     *
-     * @param string $Addr         Refer to the description above.
-     * @param bool   $ValidateOnly If true, just checks if the IP is valid only.
-     * @param int    $FactorLimit  Maximum number of CIDRs to return (default: 32).
-     * @return bool|array Refer to the description above.
-     */
-    public function ExpandIPv4($Addr, $ValidateOnly = false, $FactorLimit = 32)
-    {
-        if (!preg_match(
-            '/^([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])\.([01]?\d{1,2}|2[0-4]\d|25[0-5])$/',
-            $Addr,
-            $Octets
-        )) {
-            return false;
-        }
-        if ($ValidateOnly) {
-            return true;
-        }
-        $CIDRs = [];
-        $Base = [0, 0, 0, 0];
-        for ($Cycle = 0; $Cycle < 4; $Cycle++) {
-            for ($Size = 128, $Step = 0; $Step < 8; $Step++, $Size /= 2) {
-                $CIDR = $Step + ($Cycle * 8);
-                $Base[$Cycle] = floor($Octets[$Cycle + 1] / $Size) * $Size;
-                $CIDRs[$CIDR] = $Base[0] . '.' . $Base[1] . '.' . $Base[2] . '.' . $Base[3] . '/' . ($CIDR + 1);
-                if ($CIDR >= $FactorLimit) {
-                    break 2;
-                }
-            }
-        }
-        return $CIDRs;
-    }
-
-    /**
-     * Tests whether $Addr is an IPv6 address, and if it is, expands its potential
-     * factors (i.e., constructs an array containing the CIDRs that contain $Addr).
-     * Returns false if $Addr is *not* an IPv6 address, and otherwise, returns the
-     * contructed array.
-     *
-     * Adapted from CIDRAM/CIDRAM->vault/functions.php->$CIDRAM['ExpandIPv6']().
-     *
-     * @param string $Addr         Refer to the description above.
-     * @param bool   $ValidateOnly If true, just checks if the IP is valid only.
-     * @param int    $FactorLimit  Maximum number of CIDRs to return (default: 128).
-     * @return bool|array Refer to the description above.
-     */
-    public function ExpandIPv6($Addr, $ValidateOnly = false, $FactorLimit = 128)
-    {
-        /**
-         * The pattern used by this `preg_match` call was adapted from the IPv6
-         * pattern that can be found at
-         * @link https://sroze.io/regex-ip-v4-et-ipv6-6cc005cabe8c
-         */
-        if (!preg_match(
-            '/^((([\da-f]{1,4}:){7}[\da-f]{1,4})|(([\da-f]{1,4}:){6}:[\da-f]{1,4})' .
-            '|(([\da-f]{1,4}:){5}:([\da-f]{1,4}:)?[\da-f]{1,4})|(([\da-f]{1,4}:){4' .
-            '}:([\da-f]{1,4}:){0,2}[\da-f]{1,4})|(([\da-f]{1,4}:){3}:([\da-f]{1,4}' .
-            ':){0,3}[\da-f]{1,4})|(([\da-f]{1,4}:){2}:([\da-f]{1,4}:){0,4}[\da-f]{' .
-            '1,4})|(([\da-f]{1,4}:){6}((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2})' .
-            ')\b).){3}(\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(([\da-f]{1' .
-            ',4}:){0,5}:((\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((' .
-            '25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b))|(::([\da-f]{1,4}:){0,5}((' .
-            '\b((25[0-5])|(1\d{2})|(2[0-4]\d)|(\d{1,2}))\b).){3}(\b((25[0-5])|(1\d' .
-            '{2})|(2[0-4]\d)|(\d{1,2}))\b))|([\da-f]{1,4}::([\da-f]{1,4}:){0,5}[\d' .
-            'a-f]{1,4})|(::([\da-f]{1,4}:){0,6}[\da-f]{1,4})|(([\da-f]{1,4}:){1,7}' .
-            ':))$/i',
-            $Addr
-        )) {
-            return false;
-        }
-        if ($ValidateOnly) {
-            return true;
-        }
-        $NAddr = $Addr;
-        if (substr($NAddr, 0, 2) === '::') {
-            $NAddr = '0' . $NAddr;
-        }
-        if (substr($NAddr, -2) === '::') {
-            $NAddr .= '0';
-        }
-        if (strpos($NAddr, '::') !== false) {
-            $Key = 7 - substr_count($Addr, ':');
-            $Arr = [':0:', ':0:0:', ':0:0:0:', ':0:0:0:0:', ':0:0:0:0:0:', ':0:0:0:0:0:0:'];
-            if (!isset($Arr[$Key])) {
-                return false;
-            }
-            $NAddr = str_replace('::', $Arr[$Key], $Addr);
-            unset($Arr, $Key);
-        }
-        $NAddr = explode(':', $NAddr);
-        if (count($NAddr) !== 8) {
-            return false;
-        }
-        for ($i = 0; $i < 8; $i++) {
-            $NAddr[$i] = hexdec($NAddr[$i]);
-        }
-        $CIDRs = [];
-        $Base = [0, 0, 0, 0, 0, 0, 0, 0];
-        for ($Cycle = 0; $Cycle < 8; $Cycle++) {
-            for ($Size = 32768, $Step = 0; $Step < 16; $Step++, $Size /= 2) {
-                $CIDR = $Step + ($Cycle * 16);
-                $Base[$Cycle] = dechex(floor($NAddr[$Cycle] / $Size) * $Size);
-                $CIDRs[$CIDR] = $Base[0] . ':' . $Base[1] . ':' . $Base[2] . ':' . $Base[3] . ':' . $Base[4] . ':' . $Base[5] . ':' . $Base[6] . ':' . $Base[7] . '/' . ($CIDR + 1);
-                if ($CIDR >= $FactorLimit) {
-                    break 2;
-                }
-            }
-        }
-        foreach ($CIDRs as &$CIDR) {
-            if (strpos($CIDR, '::') !== false) {
-                $CIDR = preg_replace('~(?::0)*::(?:0:)*~i', '::', $CIDR, 1);
-                $CIDR = str_replace('::0/', '::/', $CIDR);
-                continue;
-            }
-            if (strpos($CIDR, ':0:0/') !== false) {
-                $CIDR = preg_replace('~(:0){2,}\/~i', '::/', $CIDR, 1);
-                continue;
-            }
-            if (strpos($CIDR, ':0:0:') !== false) {
-                $CIDR = preg_replace('~(:0)+:(0:)+~i', '::', $CIDR, 1);
-                $CIDR = str_replace('::0/', '::/', $CIDR);
-                continue;
-            }
-        }
-        return $CIDRs;
     }
 
     /**
@@ -333,9 +204,9 @@ class Aggregator
                 $ASize = 0;
             }
             $AType = 0;
-            if ($this->ExpandIPv4($A, true)) {
+            if ($this->expandIpv4($A, true)) {
                 $AType = 4;
-            } elseif ($this->ExpandIPv6($A, true)) {
+            } elseif ($this->expandIpv6($A, true)) {
                 $AType = 6;
             }
             $A = $AType ? inet_pton($A) : false;
@@ -356,9 +227,9 @@ class Aggregator
                 $BSize = 0;
             }
             $BType = 0;
-            if ($this->ExpandIPv4($B, true)) {
+            if ($this->expandIpv4($B, true)) {
                 $BType = 4;
-            } elseif ($this->ExpandIPv6($B, true)) {
+            } elseif ($this->expandIpv6($B, true)) {
                 $BType = 6;
             }
             $B = $BType ? inet_pton($B) : false;
@@ -456,9 +327,9 @@ class Aggregator
                 }
                 $CIDR = $Line;
             }
-            if (($Size > 0 && $Size <= 32) && ($CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1))) {
+            if (($Size > 0 && $Size <= 32) && ($CIDRs = $this->expandIpv4($CIDR, false, $Size - 1))) {
                 $Type = 4;
-            } elseif (($Size > 0 && $Size <= 128) && ($CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1))) {
+            } elseif (($Size > 0 && $Size <= 128) && ($CIDRs = $this->expandIpv6($CIDR, false, $Size - 1))) {
                 $Type = 6;
             } else {
                 $Out = str_replace("\n" . $Line . "\n", "\n", $Out);
@@ -517,8 +388,8 @@ class Aggregator
                 $RangeSep = strpos($Line, '/');
                 $Size = (int)substr($Line, $RangeSep + 1);
                 $CIDR = substr($Line, 0, $RangeSep);
-                if (!$CIDRs = $this->ExpandIPv4($CIDR, false, $Size - 1)) {
-                    $CIDRs = $this->ExpandIPv6($CIDR, false, $Size - 1);
+                if (!$CIDRs = $this->expandIpv4($CIDR, false, $Size - 1)) {
+                    $CIDRs = $this->expandIpv6($CIDR, false, $Size - 1);
                 }
                 if ($Line === $PrevLine) {
                     $Out = str_replace("\n" . $PrevLine . "\n" . $Line . "\n", "\n" . $Line . "\n", $Out);
@@ -569,7 +440,7 @@ class Aggregator
             }
             $Size = (int)substr($Line, $RangeSep + 1);
             $CIDR = substr($Line, 0, $RangeSep);
-            $Type = ($this->ExpandIPv4($CIDR, true)) ? 4 : 6;
+            $Type = ($this->expandIpv4($CIDR, true)) ? 4 : 6;
             if ($Type === 4 && isset($this->TableNetmaskIPv4[$Size])) {
                 $Size = $this->TableNetmaskIPv4[$Size];
             } elseif ($Type === 6 && isset($this->TableNetmaskIPv6[$Size])) {

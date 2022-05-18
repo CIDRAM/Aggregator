@@ -19,6 +19,7 @@ if (!isset($_SERVER['COMPOSER_BINARY'])) {
     die;
 }
 
+require __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Expand.php';
 require __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Aggregator.php';
 
 $TestInput = '127.0.0.1 Some arbitrary single IPs from here
