@@ -32,6 +32,7 @@ $TestInput = '127.0.0.1 Some arbitrary single IPs from here
 1:2:3:4::2
 1:2:3:4::3
 2002::1
+ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
 127.0.0.4
 127.0.0.5
 257.0.0.999 Some arbitrary INVALID single IPs from here
@@ -80,7 +81,8 @@ $ExpectedOutput = '1.2.3.4/31
 127.0.0.4/31
 1::/127
 1:2:3:4::/126
-2002::1/128';
+2002::1/128
+ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128';
 
 $Aggregator = new \CIDRAM\Aggregator\Aggregator();
 $Aggregator->Results = true;
@@ -102,9 +104,10 @@ $ExpectedOutput = '1.2.3.4/255.255.255.254
 127.0.0.1/255.255.255.255
 127.0.0.2/255.255.255.254
 127.0.0.4/255.255.255.254
-1::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe:0
-1:2:3:4::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc:0
-2002::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0';
+1::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe
+1:2:3:4::/ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc
+2002::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
+ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff';
 
 $Aggregator = new \CIDRAM\Aggregator\Aggregator(1);
 $Aggregator->Results = true;
