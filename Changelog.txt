@@ -26,7 +26,7 @@ PATCH RELEASE.
 - [2022.12.09; Maikuolan]: Avoid packaging unnecessary files into dist.
 
 - [2023.08.03; Bug-fix; neufeind]: The aggregator's constructTables method was
-  constructing the wrong IPv6 netmask for last hextet; Fixed.
+  constructing the wrong IPv6 netmask for the last octet; Fixed.
 
 Caleb M (Maikuolan),
 August 3, 2023.
