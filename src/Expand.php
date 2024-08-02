@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.4 (last modified: 2022.05.18).
+ * Aggregator v1.3.5 (last modified: 2024.08.02).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -20,7 +20,7 @@ trait Expand
      * Tests whether $Addr is an IPv4 address, and if it is, expands its potential
      * factors (i.e., constructs an array containing the CIDRs that contain $Addr).
      * Returns false if $Addr is *not* an IPv4 address, and otherwise, returns the
-     * contructed array.
+     * constructed array.
      *
      * @param string $Addr Refer to the description above.
      * @param bool $ValidateOnly If true, just checks if the IP is valid only.
@@ -58,7 +58,7 @@ trait Expand
      * Tests whether $Addr is an IPv6 address, and if it is, expands its potential
      * factors (i.e., constructs an array containing the CIDRs that contain $Addr).
      * Returns false if $Addr is *not* an IPv6 address, and otherwise, returns the
-     * contructed array.
+     * constructed array.
      *
      * @param string $Addr Refer to the description above.
      * @param bool $ValidateOnly If true, just checks if the IP is valid only.
