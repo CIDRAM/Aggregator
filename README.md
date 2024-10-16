@@ -1,5 +1,4 @@
-[![Join the chat at https://gitter.im/CIDRAM/Lobby](https://badges.gitter.im/CIDRAM/Lobby.svg)](https://gitter.im/CIDRAM/Lobby)
-[![PHP >= 5.4.0](https://img.shields.io/badge/PHP-%3E%3D%205.4.0-8892bf.svg)](https://maikuolan.github.io/Compatibility-Charts/)
+![PHP >= 5.4.0](https://img.shields.io/badge/PHP-%3E%3D%205.4.0-8892bf.svg)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](http://makeapullrequest.com)
 
@@ -12,7 +11,7 @@ A stand-alone class implementation of the IPv4+IPv6 IP+CIDR aggregator from CIDR
 
 ### How to install:
 
-As a stand-alone PHP class, installing it is exceptionally easy. You can download the file containing the class, [Aggregator.php](src/Aggregator.php), directly from this repository, and copy it to any projects that need it, or, if you'd prefer, you can install it using Composer:
+Installing the Aggregator is exceptionally easy. You can download the necessary files directly from the `src` directory, and then copy them to any projects that need it, or, if you'd prefer, you can install it using Composer:
 
 `composer require cidram/aggregator`
 
@@ -147,7 +146,7 @@ $Output = $Aggregator->aggregate($Input);
 echo $Aggregator->ProcessingTime . "\n";
 ```
 
-Additionally, "ExpandIPv4" and "ExpandIPv6" public methods are provided with the class, and they function in exactly the same way their CIDRAM package closure counterparts. Calling either of these with an IPv4 or IPv6 IP address respectively will return an array containing the potential factors for the given IP address. The potential factors are all possible subnets (or CIDRs) that the given IP address is a member of. When a valid IP address is supplied, "ExpandIPv4" and "ExpandIPv6" and should return an array with 32 and 128 elements respectively.
+Additionally, "expandIPv4" and "expandIPv6" public methods are provided with the class, and they function in exactly the same way their CIDRAM package closure counterparts. Calling either of these with an IPv4 or IPv6 IP address respectively will return an array containing the potential factors for the given IP address. The potential factors are all possible subnets (or CIDRs) that the given IP address is a member of. When a valid IP address is supplied, "expandIPv4" and "expandIPv6" and should return an array with 32 and 128 elements respectively.
 
 If you want Aggregator to return results as netmasks instead of CIDRs, you can instantiate the object with a parameter value of `1`, like this:
 ```PHP
@@ -189,4 +188,4 @@ Please use the issues page of this repository.
 ---
 
 
-Last Updated: 27 January 2019 (2019.01.27).
+Last Updated: 14 October 2024 (2024.10.14).

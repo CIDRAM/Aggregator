@@ -9,11 +9,11 @@ jobs:
   strategy:
    matrix:
     operating-system: [ubuntu-latest]
-    php-versions: ['5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
+    php-versions: ['5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
   name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
   steps:
   - name: Checkout
-    uses: actions/checkout@v2
+    uses: actions/checkout@v3
 
   - name: Set up PHP
     uses: shivammathur/setup-php@v2
@@ -26,3 +26,23 @@ jobs:
 
   - name: Run tests
     run: composer run-script --timeout=360 test
+
+  - name: Lint
+    run: |
+     lintPaths=()
+     lintPaths+=("${GITHUB_WORKSPACE}/src")
+     for lintPath in "${lintPaths[@]}"
+     do
+     for file in `find "$lintPath"`
+     do
+     EXTENSION="${file##*.}"
+     if [ "$EXTENSION" == "php" ]
+     then
+     RESULTS=`php -l "$file"`
+     if [ "$RESULTS" != "No syntax errors detected in $file" ]
+     then
+     echo $RESULTS
+     fi
+     fi
+     done
+     done

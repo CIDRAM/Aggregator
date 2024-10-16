@@ -7,7 +7,36 @@ Versioning guidelines for SemVer can be found at: https://semver.org/
 
 === Changes made since last versioned release ===
 
-(none)
+- [2024.06.25; Maikuolan]: A very minor performance improvement.
+
+- [2024.08.02; Maikuolan]: Fixed some typos.
+
+- [2024.10.14]: Strictened typing for the aggregator.
+
+- [2024.10.16]: Refactored and added the ability to return aggregated data
+  as an array.
+
+=== Version/Release 1.3.4 ===
+PATCH RELEASE.
+
+- [2021.10.30; Maikuolan]: Code-style cleanup: Public before private
+  properties, magic before public before private methods.
+
+- [2022.05.18; Maikuolan]: Split the methods for expanding CIDRs out to their
+  own trait.
+
+- [2022.05.25; Bug-fix; Maikuolan]: Should add to, rather than replace, the
+  numbers counted by the aggregator, and use only resetNumbers to reset those
+  numbers explicitly, due to the risk of wrong final values being presented for
+  split/tagged operations; Fixed.
+
+- [2022.12.09; Maikuolan]: Avoid packaging unnecessary files into dist.
+
+- [2023.08.03; Bug-fix; neufeind]: The aggregator's constructTables method was
+  constructing the wrong IPv6 netmask for the last octet; Fixed.
+
+Caleb M (Maikuolan),
+August 3, 2023.
 
 === Version/Release 1.3.3 ===
 PATCH RELEASE.
