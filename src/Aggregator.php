@@ -84,20 +84,18 @@ class Aggregator
     private $TableIPv6Netmask = [];
 
     /**
-     * @var int Specifies the format to use for Aggregator output.
-     *      0 = CIDR notation [default]; Data as a line-separated string.
-     *      1 = Netmask notation; Data as a line-separated string.
-     *      2 = CIDR notation [default]; Data as an array.
-     *      3 = Netmask notation; Data as an array.
+     * @var int The output format to use (refer to the constructor comments).
      */
     private $Mode = 0;
 
     /**
      * Constructor.
      *
-     * @param int $Mode Specifies the format to use for Aggregator output.
-     *      0 = CIDR notation [default].
-     *      1 = Netmask notation.
+     * @param int $Mode Specifies the format to use for the Aggregator's output.
+     *      0 = CIDR notation [default]; Data as a line-separated string.
+     *      1 = Netmask notation; Data as a line-separated string.
+     *      2 = CIDR notation [default]; Data as an array.
+     *      3 = Netmask notation; Data as an array.
      * @return void
      */
     public function __construct($Mode = 0)
@@ -109,8 +107,9 @@ class Aggregator
     /**
      * Aggregate it!
      *
-     * @param string|array $In The IPs/CIDRs/netmasks to be aggregated. Entries separated by lines.
-     * @return string The aggregated data.
+     * @param string|array $In The IPs/CIDRs/netmasks to be aggregated.
+     *      For string intput, entries to be separated by new lines (\n).
+     * @return string|array The aggregated data.
      */
     public function aggregate($In)
     {
