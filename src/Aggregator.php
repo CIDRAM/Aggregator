@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.5 (last modified: 2024.10.14).
+ * Aggregator v1.3.5 (last modified: 2024.10.16).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -85,8 +85,10 @@ class Aggregator
 
     /**
      * @var int Specifies the format to use for Aggregator output.
-     *      0 = CIDR notation [default].
-     *      1 = Netmask notation.
+     *      0 = CIDR notation [default]; Data as a line-separated string.
+     *      1 = Netmask notation; Data as a line-separated string.
+     *      2 = CIDR notation [default]; Data as an array.
+     *      3 = Netmask notation; Data as an array.
      */
     private $Mode = 0;
 
@@ -107,23 +109,26 @@ class Aggregator
     /**
      * Aggregate it!
      *
-     * @param string $In The IPs/CIDRs/netmasks to be aggregated. Entries separated by lines.
+     * @param string|array $In The IPs/CIDRs/netmasks to be aggregated. Entries separated by lines.
      * @return string The aggregated data.
      */
     public function aggregate($In)
     {
         /** Guard. */
-        if (!is_string($In)) {
+        if (!is_string($In) && !is_array($In)) {
             return '';
         }
 
         $Begin = microtime(true);
         $this->Output = $In;
-        $this->stripInvalidCharactersAndSort($this->Output);
-        $this->stripInvalidRangesAndSubs($this->Output);
-        $this->mergeRanges($this->Output);
-        if ($this->Mode === 1) {
-            $this->convertToNetmasks($this->Output);
+        $this->stripInvalidCharactersAndSort();
+        $this->stripInvalidRangesAndSubs();
+        $this->mergeRanges();
+        if ($this->Mode === 1 || $this->Mode === 3) {
+            $this->convertToNetmasks();
+        }
+        if ($this->Mode === 2 || $this->Mode === 3) {
+            $this->Output = explode("\n", $this->Output);
         }
         $this->ProcessingTime += microtime(true) - $Begin;
         return $this->Output;
@@ -176,28 +181,29 @@ class Aggregator
     /**
      * Strips invalid characters from lines and sorts entries.
      *
-     * @param string
      * @return void
      */
-    private function stripInvalidCharactersAndSort(&$In)
+    private function stripInvalidCharactersAndSort()
     {
-        $In = explode("\n", strtolower(trim(str_replace("\r", '', $In))));
-        $InCount = count($In);
+        if (!is_array($this->Output)) {
+            $this->Output = explode("\n", strtolower(trim(str_replace("\r", '', $this->Output))));
+        }
+        $Count = count($this->Output);
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
-            $this->callbacks['newParse']($InCount);
+            $this->callbacks['newParse']($Count);
         }
         if (!empty($this->Results)) {
-            $this->NumberEntered += $InCount;
+            $this->NumberEntered += $Count;
         }
-        unset($InCount);
-        $In = array_filter(array_unique(array_map(function ($Line) {
+        unset($Count);
+        $this->Output = array_filter(array_unique(array_map(function ($Line) {
             $Line = preg_replace('~^(?:(?:#| \*|/\*).*|[^\dA-Fa-f:./]*)|(?:[ \t].*|[^\dA-Fa-f:./]*)$~', '', $Line);
             if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                 $this->callbacks['newTick']();
             }
             return ($Line === '' || preg_match('~[^\da-f:./]+~i', $Line)) ? '' : $Line;
-        }, $In)));
-        usort($In, function ($A, $B) {
+        }, $this->Output)));
+        usort($this->Output, function ($A, $B) {
             if (($Pos = strpos($A, '/')) !== false) {
                 $ASize = substr($A, $Pos + 1);
                 $A = substr($A, 0, $Pos);
@@ -262,21 +268,20 @@ class Aggregator
             }
             return $Compare < 0 ? -1 : 1;
         });
-        $In = implode("\n", $In);
+        $this->Output = implode("\n", $this->Output);
     }
 
     /**
      * Strips invalid ranges and subordinates.
      *
-     * @param string
      * @return void
      */
-    private function stripInvalidRangesAndSubs(&$In)
+    private function stripInvalidRangesAndSubs()
     {
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
-            $this->callbacks['newParse'](substr_count($In, "\n"));
+            $this->callbacks['newParse'](substr_count($this->Output, "\n"));
         }
-        $In = $Out = "\n" . $In . "\n";
+        $this->Output = $Out = "\n" . $this->Output . "\n";
         $Offset = 0;
         $Low = [4 => 1, 6 => 1];
         foreach ([
@@ -293,17 +298,17 @@ class Aggregator
         ] as $Lows) {
             for ($Iterant = 1; $Iterant < $Lows[2]; $Iterant++) {
                 $Low[$Lows[0]] = $Iterant;
-                if (preg_match('~\n' . $Lows[1] . '/' . $Iterant . '(?:$|\D)~i', $In)) {
+                if (preg_match('~\n' . $Lows[1] . '/' . $Iterant . '(?:$|\D)~i', $this->Output)) {
                     break;
                 }
             }
         }
         unset($Lows);
-        while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
+        while (($NewLine = strpos($this->Output, "\n", $Offset)) !== false) {
             if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                 $this->callbacks['newTick']();
             }
-            $Line = substr($In, $Offset, $NewLine - $Offset);
+            $Line = substr($this->Output, $Offset, $NewLine - $Offset);
             $Offset = $NewLine + 1;
             if (!$Line) {
                 continue;
@@ -352,9 +357,9 @@ class Aggregator
                 }
             }
         }
-        $In = trim($Out);
+        $this->Output = trim($Out);
         if (!empty($this->Results)) {
-            $this->NumberReturned += empty($In) ? 0 : substr_count($In, "\n") + 1;
+            $this->NumberReturned += empty($this->Output) ? 0 : substr_count($this->Output, "\n") + 1;
             $this->NumberRejected = $this->NumberEntered - $this->NumberReturned - $this->NumberMerged;
             $this->NumberAccepted = $this->NumberEntered - $this->NumberRejected;
         }
@@ -363,28 +368,27 @@ class Aggregator
     /**
      * Merges ranges.
      *
-     * @param string
      * @return void
      */
-    private function mergeRanges(&$In)
+    private function mergeRanges()
     {
         while (true) {
-            $Step = $In;
+            $Step = $this->Output;
             if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
                 $this->callbacks['newParse'](substr_count($Step, "\n"));
             }
-            $In = $Out = "\n" . $In . "\n";
+            $this->Output = $Out = "\n" . $this->Output . "\n";
             $Size = $Offset = 0;
             $Line = '';
             $CIDRs = false;
-            while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
+            while (($NewLine = strpos($this->Output, "\n", $Offset)) !== false) {
                 if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                     $this->callbacks['newTick']();
                 }
                 $PrevLine = $Line;
                 $PrevSize = $Size;
                 $PrevCIDRs = $CIDRs;
-                $Line = substr($In, $Offset, $NewLine - $Offset);
+                $Line = substr($this->Output, $Offset, $NewLine - $Offset);
                 $Offset = $NewLine + 1;
                 $RangeSep = strpos($Line, '/');
                 $Size = (int)substr($Line, $RangeSep + 1);
@@ -410,8 +414,8 @@ class Aggregator
                     }
                 }
             }
-            $In = trim($Out);
-            if ($Step === $In) {
+            $this->Output = trim($Out);
+            if ($Step === $this->Output) {
                 break;
             }
         }
@@ -420,21 +424,20 @@ class Aggregator
     /**
      * Optionally converts output to netmask notation.
      *
-     * @param string
      * @return void
      */
-    private function convertToNetmasks(&$In)
+    private function convertToNetmasks()
     {
         if (isset($this->callbacks['newParse']) && is_callable($this->callbacks['newParse'])) {
-            $this->callbacks['newParse'](substr_count($In, "\n"));
+            $this->callbacks['newParse'](substr_count($this->Output, "\n"));
         }
-        $In = $Out = "\n" . $In . "\n";
+        $this->Output = $Out = "\n" . $this->Output . "\n";
         $Offset = 0;
-        while (($NewLine = strpos($In, "\n", $Offset)) !== false) {
+        while (($NewLine = strpos($this->Output, "\n", $Offset)) !== false) {
             if (isset($this->callbacks['newTick']) && is_callable($this->callbacks['newTick'])) {
                 $this->callbacks['newTick']();
             }
-            $Line = substr($In, $Offset, $NewLine - $Offset);
+            $Line = substr($this->Output, $Offset, $NewLine - $Offset);
             $Offset = $NewLine + 1;
             if (!$Line || ($RangeSep = strpos($Line, '/')) === false) {
                 continue;
@@ -449,6 +452,6 @@ class Aggregator
             }
             $Out = str_replace("\n" . $Line . "\n", "\n" . $CIDR . '/' . $Size . "\n", $Out);
         }
-        $In = trim($Out);
+        $this->Output = trim($Out);
     }
 }
