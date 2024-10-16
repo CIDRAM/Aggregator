@@ -148,7 +148,7 @@ echo $Aggregator->ProcessingTime . "\n";
 
 Additionally, "expandIPv4" and "expandIPv6" public methods are provided with the class, and they function in exactly the same way their CIDRAM package closure counterparts. Calling either of these with an IPv4 or IPv6 IP address respectively will return an array containing the potential factors for the given IP address. The potential factors are all possible subnets (or CIDRs) that the given IP address is a member of. When a valid IP address is supplied, "expandIPv4" and "expandIPv6" and should return an array with 32 and 128 elements respectively.
 
-If you want Aggregator to return results as netmasks instead of CIDRs, you can instantiate the object with a parameter value of `1`, like this:
+If you want Aggregator to return results as netmasks instead of CIDRs, you can instantiate the object with a parameter value of `1` (to return the results as netmasks in a line-separated string) or `3` (to return the results as netmasks in an array), e.g., like this:
 ```PHP
 <?php
 use \CIDRAM\Aggregator\Aggregator;
@@ -174,6 +174,8 @@ In the case of the example input mentioned earlier, the output should look somet
 2002::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff:0
 ```
 
+Specifying `2` will return the results as CIDRs in an array. When instantiating the object, when no parameter is specified, the default value of `0` is used. Any value specified other than `1`, `2`, or `3` will be treated the same as the default value, which produces the default output of CIDRs in a line-separated string.
+
 ---
 
 
@@ -188,4 +190,4 @@ Please use the issues page of this repository.
 ---
 
 
-Last Updated: 14 October 2024 (2024.10.14).
+Last Updated: 16 October 2024 (2024.10.16).

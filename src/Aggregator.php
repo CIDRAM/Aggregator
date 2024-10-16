@@ -92,9 +92,9 @@ class Aggregator
      * Constructor.
      *
      * @param int $Mode Specifies the format to use for the Aggregator's output.
-     *      0 = CIDR notation [default]; Data as a line-separated string.
+     *      0 = CIDR notation; Data as a line-separated string [Default].
      *      1 = Netmask notation; Data as a line-separated string.
-     *      2 = CIDR notation [default]; Data as an array.
+     *      2 = CIDR notation; Data as an array.
      *      3 = Netmask notation; Data as an array.
      * @return void
      */
@@ -115,7 +115,7 @@ class Aggregator
     {
         /** Guard. */
         if (!is_string($In) && !is_array($In)) {
-            return '';
+            return ($this->Mode === 2 || $this->Mode === 3) ? [] : '';
         }
 
         $Begin = microtime(true);
