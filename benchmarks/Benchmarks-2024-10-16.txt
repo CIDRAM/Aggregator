@@ -1,0 +1,46 @@
+Generated: 2024.10.16 22:50 UTC+0800 using PHP 8.3.10
+System: Windows 10 Home x64, 16GB RAM, 11th Gen Intel(R) Core(TM) i7-11700F 2.50GHz.
+
+Aggregator Benchmarks.
+===
+
+Aggregating 1,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 0.10753512382507 seconds
+Iteration 2: 0.093262910842896 seconds
+Iteration 3: 0.093255996704102 seconds
+Average time: 0.098018010457357 seconds
+
+
+Aggregating 1,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 0.19770693778992 seconds
+Iteration 2: 0.19685912132263 seconds
+Iteration 3: 0.19755792617798 seconds
+Average time: 0.19737466176351 seconds
+
+
+Aggregating 5,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 1.5327079296112 seconds
+Iteration 2: 1.5287799835205 seconds
+Iteration 3: 1.531131029129 seconds
+Average time: 1.5308729807536 seconds
+
+
+Aggregating 5,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 3.8066000938416 seconds
+Iteration 2: 3.8964412212372 seconds
+Iteration 3: 3.8456418514252 seconds
+Average time: 3.8495610555013 seconds
+
+
+Aggregating 10,000 arbitrary IPv4 CIDRs ...
+Iteration 1: 5.3696799278259 seconds
+Iteration 2: 5.4345409870148 seconds
+Iteration 3: 5.4517168998718 seconds
+Average time: 5.4186459382375 seconds
+
+
+Aggregating 10,000 arbitrary IPv6 CIDRs ...
+Iteration 1: 14.250216960907 seconds
+Iteration 2: 14.255136013031 seconds
+Iteration 3: 14.28450012207 seconds
+Average time: 14.263284365336 seconds

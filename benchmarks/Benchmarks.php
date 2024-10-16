@@ -1,4 +1,5 @@
 <?php
+require '../src/Expand.php';
 require '../src/Aggregator.php';
 
 use \CIDRAM\Aggregator\Aggregator;
