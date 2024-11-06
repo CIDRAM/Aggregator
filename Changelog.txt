@@ -7,7 +7,7 @@ Versioning guidelines for SemVer can be found at: https://semver.org/
 
 === Changes made since last versioned release ===
 
-(none)
+- [2024.11.06; Maikuolan]: Added PHP 8.4 to workflows.
 
 === Version/Release 1.3.5 ===
 PATCH RELEASE.
@@ -16,10 +16,10 @@ PATCH RELEASE.
 
 - [2024.08.02; Maikuolan]: Fixed some typos.
 
-- [2024.10.14]: Strictened typing for the aggregator.
+- [2024.10.14; Maikuolan]: Strictened typing for the aggregator.
 
-- [2024.10.16]: Refactored and added the ability to return aggregated data
-  as an array.
+- [2024.10.16; Maikuolan]: Refactored and added the ability to return
+  aggregated data as an array.
 
 Caleb M (Maikuolan),
 October 16, 2024.
