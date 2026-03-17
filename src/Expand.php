@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.5 (last modified: 2026.03.17).
+ * Aggregator v1.3.6 (last modified: 2026.03.17).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -110,7 +110,7 @@ trait Expand
             unset($Arr, $Key);
         }
         $NAddr = \explode(':', $NAddr);
-        if (count($NAddr) !== 8) {
+        if (\count($NAddr) !== 8) {
             return false;
         }
         for ($i = 0; $i < 8; $i++) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.5 (last modified: 2026.03.17).
+ * Aggregator v1.3.6 (last modified: 2026.03.17).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -187,7 +187,7 @@ class Aggregator
         if (!\is_array($this->Output)) {
             $this->Output = \explode("\n", \strtolower(\trim(\str_replace("\r", '', $this->Output))));
         }
-        $Count = count($this->Output);
+        $Count = \count($this->Output);
         if (isset($this->callbacks['newParse']) && \is_callable($this->callbacks['newParse'])) {
             $this->callbacks['newParse']($Count);
         }
