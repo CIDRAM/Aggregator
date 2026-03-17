@@ -11,6 +11,8 @@ Versioning guidelines for SemVer can be found at: https://semver.org/
 
 - [2025.11.21; Maikuolan]: Added PHP 8.5 to workflows.
 
+- [2026.03.17; Maikuolan]: Various minor performance improvements.
+
 === Version/Release 1.3.5 ===
 PATCH RELEASE.
 
