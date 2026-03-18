@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggregator v1.3.6 (last modified: 2026.03.17).
+ * Aggregator v1.3.6 (last modified: 2026.03.18).
  * @link https://github.com/CIDRAM/Aggregator
  *
  * Description: A stand-alone class implementation of the IPv4+IPv6 IP+CIDR
@@ -258,7 +258,7 @@ class Aggregator
             if ($AType !== $BType) {
                 return $AType < $BType ? -1 : 1;
             }
-            $Compare = strcmp($A, $B);
+            $Compare = \strcmp($A, $B);
             if ($Compare === 0) {
                 if ($ASize === $BSize) {
                     return 0;
