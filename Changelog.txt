@@ -5,13 +5,17 @@ Aggregator adheres to the SemVer guidelines for versioning.
 
 Versioning guidelines for SemVer can be found at: https://semver.org/
 
-=== Changes made since last versioned release ===
+=== Version/Release 1.3.6 ===
+PATCH RELEASE.
 
 - [2024.11.06; Maikuolan]: Added PHP 8.4 to workflows.
 
 - [2025.11.21; Maikuolan]: Added PHP 8.5 to workflows.
 
 - [2026.03.17; Maikuolan]: Various minor performance improvements.
+
+Caleb M (Maikuolan),
+March 26, 2026.
 
 === Version/Release 1.3.5 ===
 PATCH RELEASE.
