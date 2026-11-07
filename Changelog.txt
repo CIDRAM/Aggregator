@@ -5,6 +5,10 @@ Aggregator adheres to the SemVer guidelines for versioning.
 
 Versioning guidelines for SemVer can be found at: https://semver.org/
 
+=== In development ===
+
+- [2026.11.08]: Added PHP 8.6 to workflows.
+
 === Version/Release 1.3.6 ===
 PATCH RELEASE.
 
